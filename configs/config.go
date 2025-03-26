@@ -45,9 +45,9 @@ func LoadConfig() (*Config, error) {
 		GRPCPort: getEnvAsIntOrDefault("GRPC_PORT", 50051),
 		HTTPPort: getEnvAsIntOrDefault("HTTP_PORT", 8080),
 
-		// Plaid (required)
-		PlaidClientID:     getEnvOrDefault("PLAID_CLIENT_ID", ""),
-		PlaidSecret:      getEnvOrDefault("PLAID_SECRET", ""),
+		// Plaid (optional during development)
+		PlaidClientID:     getEnvOrDefault("PLAID_CLIENT_ID", "development"),
+		PlaidSecret:      getEnvOrDefault("PLAID_SECRET", "development"),
 		PlaidEnvironment: getEnvOrDefault("PLAID_ENVIRONMENT", "sandbox"),
 	}
 
