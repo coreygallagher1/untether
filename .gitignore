@@ -1,6 +1,9 @@
 # IDE - VSCode
 .vscode/
 
+# Environment variables
+.env
+
 # IDE - IntelliJ IDEA
 .idea/
 *.iws
