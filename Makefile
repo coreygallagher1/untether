@@ -1,4 +1,4 @@
-.PHONY: all build test proto clean docker-up docker-down migrate-up migrate-down
+.PHONY: all build test proto clean docker-up docker-down migrate-up migrate-down test-integration test-coverage
 
 # Go commands
 GOCMD=go
@@ -30,6 +30,13 @@ build:
 test:
 	$(GOTEST) -v ./...
 
+test-integration:
+	$(GOTEST) -v -tags=integration ./...
+
+test-coverage:
+	$(GOTEST) -v -coverprofile=coverage.out ./...
+	$(GOCMD) tool cover -html=coverage.out -o coverage.html
+
 proto:
 	mkdir -p $(GO_OUT_DIR)
 	$(PROTOC) -I$(PROTO_DIR) --go_out=$(GO_OUT_DIR) --go_opt=paths=source_relative \
@@ -40,6 +47,7 @@ clean:
 	$(GOCLEAN)
 	rm -rf $(BINARY_NAME)
 	rm -rf $(GO_OUT_DIR)
+	rm -rf coverage.out coverage.html
 
 deps:
 	$(GOTIDY)

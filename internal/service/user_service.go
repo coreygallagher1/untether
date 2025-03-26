@@ -4,6 +4,8 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
+	"regexp"
 	"time"
 
 	"github.com/google/uuid"
@@ -28,40 +30,46 @@ func (s *UserService) CreateUser(ctx context.Context, req *pb.CreateUserRequest)
 		return nil, status.Error(codes.InvalidArgument, "email, first_name, and last_name are required")
 	}
 
+	if !isValidEmail(req.Email) {
+		return nil, fmt.Errorf("invalid email format")
+	}
+
 	var exists bool
 	err := s.db.QueryRowContext(ctx, "SELECT EXISTS(SELECT 1 FROM users WHERE email = $1)", req.Email).Scan(&exists)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "failed to check existing user: %v", err)
+		return nil, fmt.Errorf("failed to check existing user: %v", err)
 	}
 	if exists {
-		return nil, status.Error(codes.AlreadyExists, "user with this email already exists")
+		return nil, fmt.Errorf("user with this email already exists")
 	}
 
-	var user pb.User
-	var createdAt, updatedAt time.Time
+	now := time.Now()
+	user := &pb.User{
+		Id:        uuid.New().String(),
+		Email:     req.Email,
+		FirstName: req.FirstName,
+		LastName:  req.LastName,
+		CreatedAt: timestamppb.New(now),
+		UpdatedAt: timestamppb.New(now),
+	}
 
-	err = s.db.QueryRowContext(ctx,
-		`INSERT INTO users (email, first_name, last_name) 
-		 VALUES ($1, $2, $3) 
-		 RETURNING id, email, first_name, last_name, created_at, updated_at`,
-		req.Email, req.FirstName, req.LastName,
-	).Scan(
-		&user.Id, &user.Email, &user.FirstName, &user.LastName,
-		&createdAt, &updatedAt,
-	)
+	_, err = s.db.ExecContext(ctx,
+		"INSERT INTO users (id, email, first_name, last_name, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6)",
+		user.Id, user.Email, user.FirstName, user.LastName, user.CreatedAt.AsTime(), user.UpdatedAt.AsTime())
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "failed to create user: %v", err)
+		return nil, fmt.Errorf("failed to create user: %v", err)
 	}
 
-	user.CreatedAt = timestamppb.New(createdAt)
-	user.UpdatedAt = timestamppb.New(updatedAt)
-
-	return &user, nil
+	return user, nil
 }
 
 func (s *UserService) GetUser(ctx context.Context, req *pb.GetUserRequest) (*pb.User, error) {
 	if req.Id == "" {
 		return nil, status.Error(codes.InvalidArgument, "user ID is required")
+	}
+
+	if _, err := uuid.Parse(req.Id); err != nil {
+		return nil, fmt.Errorf("invalid UUID")
 	}
 
 	var user pb.User
@@ -79,7 +87,7 @@ func (s *UserService) GetUser(ctx context.Context, req *pb.GetUserRequest) (*pb.
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, status.Error(codes.NotFound, "user not found")
 		}
-		return nil, status.Errorf(codes.Internal, "failed to get user: %v", err)
+		return nil, fmt.Errorf("failed to get user: %v", err)
 	}
 
 	user.CreatedAt = timestamppb.New(createdAt)
@@ -120,30 +128,28 @@ func (s *UserService) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest)
 		return nil, status.Error(codes.InvalidArgument, "user ID is required")
 	}
 
-	var user pb.User
-	var createdAt, updatedAt time.Time
-
-	err := s.db.QueryRowContext(ctx,
-		`UPDATE users 
-		 SET first_name = $1, last_name = $2, updated_at = CURRENT_TIMESTAMP 
-		 WHERE id = $3 
-		 RETURNING id, email, first_name, last_name, created_at, updated_at`,
-		req.FirstName, req.LastName, req.Id,
-	).Scan(
-		&user.Id, &user.Email, &user.FirstName, &user.LastName,
-		&createdAt, &updatedAt,
-	)
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return nil, status.Error(codes.NotFound, "user not found")
-		}
-		return nil, status.Errorf(codes.Internal, "failed to update user: %v", err)
+	if _, err := uuid.Parse(req.Id); err != nil {
+		return nil, fmt.Errorf("invalid UUID")
 	}
 
-	user.CreatedAt = timestamppb.New(createdAt)
-	user.UpdatedAt = timestamppb.New(updatedAt)
+	var exists bool
+	err := s.db.QueryRowContext(ctx, "SELECT EXISTS(SELECT 1 FROM users WHERE id = $1)", req.Id).Scan(&exists)
+	if err != nil {
+		return nil, fmt.Errorf("failed to check existing user: %v", err)
+	}
+	if !exists {
+		return nil, fmt.Errorf("user not found")
+	}
 
-	return &user, nil
+	now := time.Now()
+	_, err = s.db.ExecContext(ctx,
+		"UPDATE users SET first_name = $1, last_name = $2, updated_at = $3 WHERE id = $4",
+		req.FirstName, req.LastName, now, req.Id)
+	if err != nil {
+		return nil, fmt.Errorf("failed to update user: %v", err)
+	}
+
+	return s.GetUser(ctx, &pb.GetUserRequest{Id: req.Id})
 }
 
 func (s *UserService) DeleteUser(ctx context.Context, req *pb.DeleteUserRequest) (*pb.DeleteUserResponse, error) {
@@ -151,9 +157,22 @@ func (s *UserService) DeleteUser(ctx context.Context, req *pb.DeleteUserRequest)
 		return nil, status.Error(codes.InvalidArgument, "user ID is required")
 	}
 
+	if _, err := uuid.Parse(req.Id); err != nil {
+		return nil, fmt.Errorf("invalid UUID")
+	}
+
+	var exists bool
+	err := s.db.QueryRowContext(ctx, "SELECT EXISTS(SELECT 1 FROM users WHERE id = $1)", req.Id).Scan(&exists)
+	if err != nil {
+		return nil, fmt.Errorf("failed to check existing user: %v", err)
+	}
+	if !exists {
+		return nil, fmt.Errorf("user not found")
+	}
+
 	result, err := s.db.ExecContext(ctx, "DELETE FROM users WHERE id = $1", req.Id)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "failed to delete user: %v", err)
+		return nil, fmt.Errorf("failed to delete user: %v", err)
 	}
 
 	rowsAffected, err := result.RowsAffected()
@@ -239,4 +258,9 @@ func (s *UserService) ListBankAccounts(ctx context.Context, req *pb.ListBankAcco
 	return &pb.ListBankAccountsResponse{
 		Accounts: accounts,
 	}, nil
+}
+
+func isValidEmail(email string) bool {
+	emailRegex := regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
+	return emailRegex.MatchString(email)
 } 
