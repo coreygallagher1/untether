@@ -197,8 +197,8 @@ func (s *UserService) LinkBankAccount(ctx context.Context, req *pb.LinkBankAccou
 		UserId:         req.UserId,
 		PlaidAccountId: req.PlaidAccountId,
 		Name:           "Checking Account", // This should come from Plaid
-		Type:           "checking",        // This should come from Plaid
-		Balance:        0.0,              // This should come from Plaid
+		Type:           "checking",         // This should come from Plaid
+		Balance:        0.0,                // This should come from Plaid
 		Currency:       "USD",
 		IsActive:       true,
 	}
@@ -263,4 +263,4 @@ func (s *UserService) ListBankAccounts(ctx context.Context, req *pb.ListBankAcco
 func isValidEmail(email string) bool {
 	emailRegex := regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
 	return emailRegex.MatchString(email)
-} 
+}

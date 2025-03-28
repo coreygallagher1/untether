@@ -4,11 +4,12 @@ import (
 	"context"
 	"testing"
 
+	"untether/internal/proto"
+	"untether/internal/service"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"untether/internal/proto"
-	"untether/internal/service"
 )
 
 func TestUserService_CreateUser(t *testing.T) {
@@ -267,4 +268,4 @@ func TestUserService_DeleteUser(t *testing.T) {
 			assert.Contains(t, err.Error(), "not found")
 		})
 	}
-} 
+}
