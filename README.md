@@ -2,11 +2,17 @@
 
 ## Mission Statement
 
-At untether, we empower you to break free from the constraints of debt. Through automation, our products simplify financial management. We're committed to helping you untether yourself from debt and move toward a future of financial freedom.
+**Untether empowers individuals to reclaim their financial freedom through intelligent, automated financial tools.** We believe that managing money shouldn't be a burden—our innovative platform simplifies the process of paying down debt, saving, and supporting meaningful causes. By automating everyday financial decisions, Untether enables users to effortlessly take control of their finances, create lasting habits, and make a positive social impact.
 
 ## Overview
 
-Untether is a financial automation platform that helps users manage their finances and break free from debt. The platform provides automated deposits and roundups on transactions and that can be used to pay down loans, donations, or towards a cause.
+**Untether** is a comprehensive financial automation platform designed to help users effortlessly manage their money and break free from debt. Inspired by behavioral finance principles, our platform rounds up daily transactions and automatically allocates the spare change towards personal financial goals—such as loan repayment and charitable giving.
+
+### Key Features
+- **Automated Roundups:** Securely link bank accounts to automatically round up daily purchases and direct those roundups toward loans, donations, or savings goals.
+- **Debt Repayment:** Seamlessly allocate spare change toward paying off student loans, credit card balances, and other debts.
+- **Social Good:** Contribute automatically to selected charities and causes with every purchase, transforming everyday spending into meaningful impact.
+- **Secure and Transparent:** Built with robust security measures and transparent processes, ensuring users have peace of mind and visibility into their financial progress.
 
 ## Project Structure
 
