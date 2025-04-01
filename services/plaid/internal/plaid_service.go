@@ -3,21 +3,21 @@ package internal
 import (
 	"context"
 	"database/sql"
-	"fmt"
 
-	"github.com/cgallagher/Untether/pkg/plaid"
-	pb "github.com/cgallagher/Untether/services/plaid/proto"
+	"untether/services/plaid/client"
+	pb "untether/services/plaid/proto"
+
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
 type PlaidService struct {
 	pb.UnimplementedPlaidServiceServer
-	client plaid.PlaidClient
+	client client.PlaidClient
 	db     *sql.DB
 }
 
-func NewPlaidService(client plaid.PlaidClient, db *sql.DB) *PlaidService {
+func NewPlaidService(client client.PlaidClient, db *sql.DB) *PlaidService {
 	return &PlaidService{
 		client: client,
 		db:     db,
@@ -52,14 +52,15 @@ func (s *PlaidService) GetAccounts(ctx context.Context, req *pb.GetAccountsReque
 		return nil, status.Errorf(codes.Internal, "failed to get accounts: %v", err)
 	}
 
-	var pbAccounts []*pb.Account
-	for _, acc := range accounts {
-		pbAccounts = append(pbAccounts, &pb.Account{
-			AccountId: acc.ID,
-			Name:      acc.Name,
-			Type:      acc.Type,
-			Subtype:   acc.Subtype,
-		})
+	pbAccounts := make([]*pb.BankAccount, len(accounts))
+	for i, account := range accounts {
+		pbAccounts[i] = &pb.BankAccount{
+			AccountId: account.AccountID,
+			Name:      account.Name,
+			Type:      account.Type,
+			Subtype:   account.Subtype,
+			Mask:      account.Mask,
+		}
 	}
 
 	return &pb.GetAccountsResponse{
@@ -74,8 +75,6 @@ func (s *PlaidService) GetBalance(ctx context.Context, req *pb.GetBalanceRequest
 	}
 
 	return &pb.GetBalanceResponse{
-		Balance: &pb.Balance{
-			Current: fmt.Sprintf("%.2f", balance),
-		},
+		Balance: balance,
 	}, nil
 }

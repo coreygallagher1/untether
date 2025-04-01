@@ -1,4 +1,4 @@
-package user
+package internal
 
 import (
 	"context"
@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
-	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -14,17 +13,24 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
-	"github.com/cgallagher/Untether/pkg/plaid"
-	pb "github.com/cgallagher/Untether/services/user/proto"
+	"untether/services/plaid/client"
+	pb "untether/services/user/proto"
 )
+
+// DB interface defines the database operations needed by the UserService
+type DB interface {
+	QueryRowContext(ctx context.Context, query string, args ...interface{}) *sql.Row
+	ExecContext(ctx context.Context, query string, args ...interface{}) (sql.Result, error)
+	QueryContext(ctx context.Context, query string, args ...interface{}) (*sql.Rows, error)
+}
 
 type UserService struct {
 	pb.UnimplementedUserServiceServer
-	db          *sql.DB
-	plaidClient plaid.PlaidClient
+	db          DB
+	plaidClient client.PlaidClient
 }
 
-func NewUserService(db *sql.DB, plaidClient plaid.PlaidClient) *UserService {
+func NewUserService(db DB, plaidClient client.PlaidClient) *UserService {
 	return &UserService{
 		db:          db,
 		plaidClient: plaidClient,
@@ -225,10 +231,10 @@ func (s *UserService) LinkBankAccount(ctx context.Context, req *pb.LinkBankAccou
 	}
 
 	// Find the specific account
-	var plaidAccount plaid.BankAccount
+	var plaidAccount client.BankAccount
 	found := false
 	for _, acc := range accounts {
-		if acc.ID == req.PlaidAccountId {
+		if acc.AccountID == req.PlaidAccountId {
 			plaidAccount = acc
 			found = true
 			break
@@ -249,67 +255,73 @@ func (s *UserService) LinkBankAccount(ctx context.Context, req *pb.LinkBankAccou
 		UserId:         req.UserId,
 		PlaidAccountId: req.PlaidAccountId,
 		Name:           plaidAccount.Name,
-		Type:           strings.ToUpper(plaidAccount.Type),
+		Type:           plaidAccount.Type,
 		Balance:        balance,
-		Currency:       plaidAccount.Currency,
+		Currency:       "USD", // Default to USD for now
 		IsActive:       true,
+		CreatedAt:      timestamppb.Now(),
+		UpdatedAt:      timestamppb.Now(),
 	}
 
-	var createdAt, updatedAt time.Time
-	err = s.db.QueryRowContext(ctx,
-		`INSERT INTO bank_accounts 
-		 (id, user_id, plaid_account_id, name, type, balance, currency, is_active) 
-		 VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
-		 RETURNING created_at, updated_at`,
-		account.Id, account.UserId, account.PlaidAccountId, account.Name,
-		account.Type, account.Balance, account.Currency, account.IsActive,
-	).Scan(&createdAt, &updatedAt)
+	// Store account in database
+	_, err = s.db.ExecContext(ctx,
+		`INSERT INTO bank_accounts (id, user_id, plaid_account_id, name, type, balance, currency, is_active, created_at, updated_at)
+		 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+		account.Id, account.UserId, account.PlaidAccountId, account.Name, account.Type,
+		account.Balance, account.Currency, account.IsActive,
+		account.CreatedAt.AsTime(), account.UpdatedAt.AsTime(),
+	)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "failed to create bank account: %v", err)
+		return nil, status.Errorf(codes.Internal, "failed to store bank account: %v", err)
 	}
-
-	account.CreatedAt = timestamppb.New(createdAt)
-	account.UpdatedAt = timestamppb.New(updatedAt)
 
 	return account, nil
 }
 
 func (s *UserService) ListBankAccounts(ctx context.Context, req *pb.ListBankAccountsRequest) (*pb.ListBankAccountsResponse, error) {
-	if req.UserId == "" {
-		return nil, status.Error(codes.InvalidArgument, "user_id is required")
-	}
-
-	rows, err := s.db.QueryContext(ctx,
-		`SELECT id, plaid_account_id, name, type, balance, currency, is_active, created_at, updated_at 
-		 FROM bank_accounts WHERE user_id = $1`,
-		req.UserId,
-	)
+	// Get user's access token from database
+	accessToken, err := s.getUserAccessToken(ctx, req.UserId)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "failed to get bank accounts: %v", err)
+		return nil, err
 	}
-	defer rows.Close()
 
-	var accounts []*pb.BankAccount
-	for rows.Next() {
-		var account pb.BankAccount
-		var createdAt, updatedAt time.Time
-		err := rows.Scan(
-			&account.Id, &account.PlaidAccountId, &account.Name, &account.Type,
-			&account.Balance, &account.Currency, &account.IsActive,
-			&createdAt, &updatedAt,
-		)
+	// Get accounts from Plaid
+	accounts, err := s.plaidClient.GetAccounts(ctx, accessToken)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to get accounts: %v", err)
+	}
+
+	var pbAccounts []*pb.BankAccount
+	for _, acc := range accounts {
+		balance, err := s.plaidClient.GetBalance(ctx, accessToken, acc.AccountID)
 		if err != nil {
-			return nil, status.Errorf(codes.Internal, "failed to scan bank account: %v", err)
+			return nil, status.Errorf(codes.Internal, "failed to get balance: %v", err)
 		}
-		account.UserId = req.UserId
-		account.CreatedAt = timestamppb.New(createdAt)
-		account.UpdatedAt = timestamppb.New(updatedAt)
-		accounts = append(accounts, &account)
+
+		pbAccounts = append(pbAccounts, &pb.BankAccount{
+			Id:             acc.AccountID,
+			UserId:         req.UserId,
+			PlaidAccountId: acc.AccountID,
+			Name:           acc.Name,
+			Type:           acc.Type,
+			Balance:        balance,
+			Currency:       "USD", // Default to USD for now
+			IsActive:       true,
+			CreatedAt:      timestamppb.Now(),
+			UpdatedAt:      timestamppb.Now(),
+		})
 	}
 
 	return &pb.ListBankAccountsResponse{
-		Accounts: accounts,
+		Accounts: pbAccounts,
 	}, nil
+}
+
+// getUserAccessToken retrieves the Plaid access token for a user from the database
+func (s *UserService) getUserAccessToken(ctx context.Context, userID string) (string, error) {
+	// TODO: Implement database lookup for user's Plaid access token
+	// For now, return a mock token
+	return "access-sandbox-123", nil
 }
 
 func isValidEmail(email string) bool {

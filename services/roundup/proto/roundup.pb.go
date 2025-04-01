@@ -129,16 +129,16 @@ var File_roundup_proto protoreflect.FileDescriptor
 
 const file_roundup_proto_rawDesc = "" +
 	"\n" +
-	"\rroundup.proto\x12\x05proto\"X\n" +
+	"\rroundup.proto\x12\aroundup\"X\n" +
 	"\x0eRoundupRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12-\n" +
 	"\x12transaction_amount\x18\x02 \x01(\x01R\x11transactionAmount\"W\n" +
 	"\x0fRoundupResponse\x12\x1d\n" +
 	"\n" +
 	"roundup_id\x18\x01 \x01(\tR\troundupId\x12%\n" +
-	"\x0eamount_rounded\x18\x02 \x01(\x01R\ramountRounded2U\n" +
-	"\x0eRoundupService\x12C\n" +
-	"\x12RoundupTransaction\x12\x15.proto.RoundupRequest\x1a\x16.proto.RoundupResponseB\x16Z\x14untether/proto;protob\x06proto3"
+	"\x0eamount_rounded\x18\x02 \x01(\x01R\ramountRounded2Y\n" +
+	"\x0eRoundupService\x12G\n" +
+	"\x12RoundupTransaction\x12\x17.roundup.RoundupRequest\x1a\x18.roundup.RoundupResponseB!Z\x1funtether/services/roundup/protob\x06proto3"
 
 var (
 	file_roundup_proto_rawDescOnce sync.Once
@@ -154,12 +154,12 @@ func file_roundup_proto_rawDescGZIP() []byte {
 
 var file_roundup_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_roundup_proto_goTypes = []any{
-	(*RoundupRequest)(nil),  // 0: proto.RoundupRequest
-	(*RoundupResponse)(nil), // 1: proto.RoundupResponse
+	(*RoundupRequest)(nil),  // 0: roundup.RoundupRequest
+	(*RoundupResponse)(nil), // 1: roundup.RoundupResponse
 }
 var file_roundup_proto_depIdxs = []int32{
-	0, // 0: proto.RoundupService.RoundupTransaction:input_type -> proto.RoundupRequest
-	1, // 1: proto.RoundupService.RoundupTransaction:output_type -> proto.RoundupResponse
+	0, // 0: roundup.RoundupService.RoundupTransaction:input_type -> roundup.RoundupRequest
+	1, // 1: roundup.RoundupService.RoundupTransaction:output_type -> roundup.RoundupResponse
 	1, // [1:2] is the sub-list for method output_type
 	0, // [0:1] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name

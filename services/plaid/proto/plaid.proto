@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package proto;
+package plaid;
 
-option go_package = "github.com/cgallagher/Untether/services/plaid/proto";
+option go_package = "untether/services/plaid/proto";
 
 service PlaidService {
   rpc CreateLinkToken (CreateLinkTokenRequest) returns (CreateLinkTokenResponse);
@@ -32,7 +32,7 @@ message GetAccountsRequest {
   string access_token = 1;
 }
 
-message Account {
+message BankAccount {
   string account_id = 1;
   string name = 2;
   string type = 3;
@@ -41,7 +41,7 @@ message Account {
 }
 
 message GetAccountsResponse {
-  repeated Account accounts = 1;
+  repeated BankAccount accounts = 1;
 }
 
 message GetBalanceRequest {
@@ -49,13 +49,6 @@ message GetBalanceRequest {
   string account_id = 2;
 }
 
-message Balance {
-  string available = 1;
-  string current = 2;
-  string limit = 3;
-  string iso_currency_code = 4;
-}
-
 message GetBalanceResponse {
-  Balance balance = 1;
+  double balance = 1;
 } 

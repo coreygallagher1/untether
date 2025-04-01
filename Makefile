@@ -6,16 +6,15 @@ include .env
 export
 
 # Declare all phony targets
-.PHONY: all build test proto clean docker-up docker-down migrate-up migrate-down test-integration test-coverage \
-	build-user build-plaid build-roundup \
-	run-user run-plaid run-roundup \
-	proto-user proto-plaid proto-roundup \
-	test-user test-plaid test-roundup \
-	docker-build docker-build-user docker-build-plaid docker-build-roundup \
-	dev-setup logs-user logs-plaid logs-roundup \
+.PHONY: all build test proto clean docker-up docker-down migrate-up migrate-down \
+	build-services docker-build \
+	proto-services \
+	test-services \
+	logs-services \
 	db-create db-drop db-reset db-query \
-	lint fmt fmt-check check-deps health-check \
-	clean clean-binaries clean-docker clean-coverage
+	lint fmt fmt-check check-deps \
+	clean clean-docker \
+	dev-setup dev-cleanup
 
 # Go commands
 GOCMD=go
@@ -25,11 +24,6 @@ GOGET=$(GOCMD) get
 GOCLEAN=$(GOCMD) clean
 GOMOD=$(GOCMD) mod
 GOTIDY=$(GOCMD) mod tidy
-
-# Binary names
-USER_BINARY=user-service
-PLAID_BINARY=plaid-service
-ROUNDUP_BINARY=roundup-service
 
 # Proto commands
 PROTOC=protoc
@@ -51,24 +45,26 @@ all: test build
 dev-setup: check-deps
 	@echo "Setting up development environment..."
 	$(GOTIDY)
-	$(MAKE) proto
+	$(MAKE) proto-services
 	$(MAKE) docker-build
+
+dev-cleanup:
+	@echo "Cleaning up development environment..."
+	$(MAKE) docker-down
+	$(GOCLEAN)
+	rm -rf user-service plaid-service roundup-service
+	rm -rf services/*/proto/*.pb.go
+	@echo "Development environment cleaned up"
 
 # Build Commands
 # -------------
-build: build-user build-plaid build-roundup
+build: build-services
 
-build-user:
-	@echo "Building user service..."
-	$(GOBUILD) -o $(USER_BINARY) ./services/user/cmd
-
-build-plaid:
-	@echo "Building plaid service..."
-	$(GOBUILD) -o $(PLAID_BINARY) ./services/plaid/cmd
-
-build-roundup:
-	@echo "Building roundup service..."
-	$(GOBUILD) -o $(ROUNDUP_BINARY) ./services/roundup/cmd
+build-services:
+	@echo "Building all services..."
+	$(GOBUILD) -o user-service ./services/user/cmd
+	$(GOBUILD) -o plaid-service ./services/plaid/cmd
+	$(GOBUILD) -o roundup-service ./services/roundup/cmd
 
 # Docker Commands
 # --------------
@@ -88,33 +84,17 @@ docker-down:
 	@echo "Stopping Docker services..."
 	docker compose down
 
-docker-build: docker-build-user docker-build-plaid docker-build-roundup
-
-docker-build-user:
-	@echo "Building user service Docker image..."
+docker-build:
+	@echo "Building Docker images..."
 	docker build -t untether-user-service -f services/user/Dockerfile .
-
-docker-build-plaid:
-	@echo "Building plaid service Docker image..."
 	docker build -t untether-plaid-service -f services/plaid/Dockerfile .
-
-docker-build-roundup:
-	@echo "Building roundup service Docker image..."
 	docker build -t untether-roundup-service -f services/roundup/Dockerfile .
 
 # Service Logs
 # -----------
-logs-user:
-	@echo "Viewing user service logs..."
-	docker compose logs -f user-service
-
-logs-plaid:
-	@echo "Viewing plaid service logs..."
-	docker compose logs -f plaid-service
-
-logs-roundup:
-	@echo "Viewing roundup service logs..."
-	docker compose logs -f roundup-service
+logs-services:
+	@echo "Viewing service logs..."
+	docker compose logs -f
 
 # Database Commands
 # ----------------
@@ -146,47 +126,24 @@ db-query:
 
 # Test Commands
 # ------------
-test: test-user test-plaid test-roundup
+test: test-services
 
-test-user:
-	@echo "Running user service tests..."
-	$(GOTEST) -v ./services/user/...
-
-test-plaid:
-	@echo "Running plaid service tests..."
-	$(GOTEST) -v ./services/plaid/...
-
-test-roundup:
-	@echo "Running roundup service tests..."
-	$(GOTEST) -v ./services/roundup/...
-
-test-integration:
-	@echo "Running integration tests..."
-	$(GOTEST) -v -tags=integration ./...
-
-test-coverage:
-	@echo "Generating test coverage report..."
-	$(GOTEST) -v -coverprofile=coverage.out ./...
-	$(GOCMD) tool cover -html=coverage.out -o coverage.html
+test-services:
+	@echo "Running all service tests..."
+	$(GOTEST) -v ./services/...
 
 # Proto Commands
 # -------------
-proto: proto-user proto-plaid proto-roundup
+proto: proto-services
 
-proto-user:
-	@echo "Generating user service protos..."
+proto-services:
+	@echo "Generating all service protos..."
 	$(PROTOC) -I./services/user/proto --go_out=./services/user/proto --go_opt=paths=source_relative \
 		--go-grpc_out=./services/user/proto --go-grpc_opt=paths=source_relative \
 		./services/user/proto/user.proto
-
-proto-plaid:
-	@echo "Generating plaid service protos..."
 	$(PROTOC) -I./services/plaid/proto --go_out=./services/plaid/proto --go_opt=paths=source_relative \
 		--go-grpc_out=./services/plaid/proto --go-grpc_opt=paths=source_relative \
 		./services/plaid/proto/plaid.proto
-
-proto-roundup:
-	@echo "Generating roundup service protos..."
 	$(PROTOC) -I./services/roundup/proto --go_out=./services/roundup/proto --go_opt=paths=source_relative \
 		--go-grpc_out=./services/roundup/proto --go-grpc_opt=paths=source_relative \
 		./services/roundup/proto/roundup.proto
@@ -213,31 +170,14 @@ check-deps:
 	@command -v golangci-lint >/dev/null 2>&1 || { echo "golangci-lint is required but not installed. Aborting." >&2; exit 1; }
 	@command -v migrate >/dev/null 2>&1 || { echo "migrate is required but not installed. Aborting." >&2; exit 1; }
 
-# Health Checks
-# -----------
-health-check:
-	@echo "Checking service health..."
-	@curl -s http://localhost:$(USER_PORT)/health || echo "User service not healthy"
-	@curl -s http://localhost:$(PLAID_PORT)/health || echo "Plaid service not healthy"
-	@curl -s http://localhost:$(ROUNDUP_PORT)/health || echo "Roundup service not healthy"
-
 # Cleanup Commands
 # --------------
-clean: clean-binaries clean-docker clean-coverage
-
-clean-binaries:
-	@echo "Cleaning binaries..."
-	$(GOCLEAN)
-	rm -rf $(USER_BINARY) $(PLAID_BINARY) $(ROUNDUP_BINARY)
+clean: clean-docker
 
 clean-docker:
 	@echo "Cleaning Docker resources..."
 	docker compose down -v
 	docker system prune -f
-
-clean-coverage:
-	@echo "Cleaning coverage reports..."
-	rm -rf coverage.out coverage.html
 
 # Help
 # ----
@@ -245,18 +185,14 @@ help:
 	@echo "Available commands:"
 	@echo "  make all              - Run tests and build all services"
 	@echo "  make dev-setup        - Set up development environment"
+	@echo "  make dev-cleanup      - Clean up development environment"
 	@echo "  make build           - Build all services"
 	@echo "  make docker-up       - Start Docker services"
 	@echo "  make docker-down     - Stop Docker services"
-	@echo "  make docker-build    - Build Docker images"
-	@echo "  make logs-*          - View service logs (user/plaid/roundup)"
-	@echo "  make migrate-up      - Run database migrations"
-	@echo "  make migrate-down    - Roll back migrations"
-	@echo "  make db-reset        - Reset database (drop, create, migrate)"
+	@echo "  make logs-services   - View all service logs"
+	@echo "  make db-reset        - Reset database"
 	@echo "  make test           - Run all tests"
-	@echo "  make test-coverage  - Generate test coverage report"
-	@echo "  make proto          - Generate protobuf files"
+	@echo "  make proto          - Generate all protos"
 	@echo "  make lint           - Run linter"
 	@echo "  make fmt            - Format code"
-	@echo "  make health-check   - Check service health"
-	@echo "  make clean          - Clean up build artifacts" 
+	@echo "  make clean          - Clean up resources" 

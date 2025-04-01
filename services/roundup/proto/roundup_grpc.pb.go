@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	RoundupService_RoundupTransaction_FullMethodName = "/proto.RoundupService/RoundupTransaction"
+	RoundupService_RoundupTransaction_FullMethodName = "/roundup.RoundupService/RoundupTransaction"
 )
 
 // RoundupServiceClient is the client API for RoundupService service.
@@ -96,7 +96,7 @@ func _RoundupService_RoundupTransaction_Handler(srv interface{}, ctx context.Con
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var RoundupService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "proto.RoundupService",
+	ServiceName: "roundup.RoundupService",
 	HandlerType: (*RoundupServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

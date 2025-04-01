@@ -8,12 +8,14 @@ import (
 	"net"
 	"os"
 
-	"github.com/cgallagher/Untether/pkg/plaid"
-	"github.com/cgallagher/Untether/services/plaid/internal"
-	pb "github.com/cgallagher/Untether/services/plaid/proto"
-	_ "github.com/lib/pq"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
+
+	"untether/services/plaid/client"
+	"untether/services/plaid/internal"
+	pb "untether/services/plaid/proto"
+
+	_ "github.com/lib/pq"
 )
 
 var (
@@ -75,15 +77,19 @@ func main() {
 		plaidEnvironment = "sandbox"
 	}
 
-	plaidClient := plaid.NewPlaidClient(plaidClientID, plaidClientSecret, plaidEnvironment)
+	plaidClient := client.NewPlaidClient(plaidClientID, plaidClientSecret, plaidEnvironment)
 
+	// Initialize plaid service
+	plaidService := internal.NewPlaidService(plaidClient, db)
+
+	// Create gRPC server
 	lis, err := net.Listen("tcp", fmt.Sprintf("0.0.0.0:%d", *port))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
 	s := grpc.NewServer()
-	pb.RegisterPlaidServiceServer(s, internal.NewPlaidService(plaidClient, db))
+	pb.RegisterPlaidServiceServer(s, plaidService)
 
 	// Register reflection service for gRPCurl
 	reflection.Register(s)

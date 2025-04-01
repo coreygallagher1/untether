@@ -19,10 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	PlaidService_CreateLinkToken_FullMethodName     = "/proto.PlaidService/CreateLinkToken"
-	PlaidService_ExchangePublicToken_FullMethodName = "/proto.PlaidService/ExchangePublicToken"
-	PlaidService_GetAccounts_FullMethodName         = "/proto.PlaidService/GetAccounts"
-	PlaidService_GetBalance_FullMethodName          = "/proto.PlaidService/GetBalance"
+	PlaidService_CreateLinkToken_FullMethodName     = "/plaid.PlaidService/CreateLinkToken"
+	PlaidService_ExchangePublicToken_FullMethodName = "/plaid.PlaidService/ExchangePublicToken"
+	PlaidService_GetAccounts_FullMethodName         = "/plaid.PlaidService/GetAccounts"
+	PlaidService_GetBalance_FullMethodName          = "/plaid.PlaidService/GetBalance"
 )
 
 // PlaidServiceClient is the client API for PlaidService service.
@@ -195,7 +195,7 @@ func _PlaidService_GetBalance_Handler(srv interface{}, ctx context.Context, dec 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var PlaidService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "proto.PlaidService",
+	ServiceName: "plaid.PlaidService",
 	HandlerType: (*PlaidServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

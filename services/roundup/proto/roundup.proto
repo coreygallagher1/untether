@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package proto;
+package roundup;
 
-option go_package = "untether/proto;proto";
+option go_package = "untether/services/roundup/proto";
 
 service RoundupService {
   rpc RoundupTransaction(RoundupRequest) returns (RoundupResponse);

@@ -8,11 +8,13 @@ import (
 	"net"
 	"os"
 
-	"github.com/cgallagher/Untether/services/roundup/internal"
-	pb "github.com/cgallagher/Untether/services/roundup/proto"
-	_ "github.com/lib/pq"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
+
+	"untether/services/roundup/internal"
+	pb "untether/services/roundup/proto"
+
+	_ "github.com/lib/pq"
 )
 
 var (
@@ -58,13 +60,17 @@ func main() {
 		log.Fatalf("failed to ping database: %v", err)
 	}
 
+	// Initialize roundup service
+	roundupService := internal.NewRoundupService(db)
+
+	// Create gRPC server
 	lis, err := net.Listen("tcp", fmt.Sprintf("0.0.0.0:%d", *port))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
 	s := grpc.NewServer()
-	pb.RegisterRoundupServiceServer(s, internal.NewRoundupService(db))
+	pb.RegisterRoundupServiceServer(s, roundupService)
 
 	// Register reflection service for gRPCurl
 	reflection.Register(s)

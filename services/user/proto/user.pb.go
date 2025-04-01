@@ -635,7 +635,7 @@ var File_user_proto protoreflect.FileDescriptor
 const file_user_proto_rawDesc = "" +
 	"\n" +
 	"\n" +
-	"user.proto\x12\x05proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x97\x02\n" +
+	"user.proto\x12\x04user\x1a\x1fgoogle/protobuf/timestamp.proto\"\x96\x02\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
 	"\x05email\x18\x02 \x01(\tR\x05email\x12\x1d\n" +
@@ -645,8 +645,8 @@ const file_user_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x127\n" +
-	"\rbank_accounts\x18\a \x03(\v2\x12.proto.BankAccountR\fbankAccounts\"\xd1\x02\n" +
+	"updated_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x126\n" +
+	"\rbank_accounts\x18\a \x03(\v2\x11.user.BankAccountR\fbankAccounts\"\xd1\x02\n" +
 	"\vBankAccount\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12(\n" +
@@ -682,19 +682,22 @@ const file_user_proto_rawDesc = "" +
 	"\x12plaid_access_token\x18\x02 \x01(\tR\x10plaidAccessToken\x12(\n" +
 	"\x10plaid_account_id\x18\x03 \x01(\tR\x0eplaidAccountId\"2\n" +
 	"\x17ListBankAccountsRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\tR\x06userId\"J\n" +
-	"\x18ListBankAccountsResponse\x12.\n" +
-	"\baccounts\x18\x01 \x03(\v2\x12.proto.BankAccountR\baccounts2\x84\x03\n" +
-	"\vUserService\x123\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\"I\n" +
+	"\x18ListBankAccountsResponse\x12-\n" +
+	"\baccounts\x18\x01 \x03(\v2\x11.user.BankAccountR\baccounts2\xf8\x02\n" +
+	"\vUserService\x121\n" +
 	"\n" +
-	"CreateUser\x12\x18.proto.CreateUserRequest\x1a\v.proto.User\x12-\n" +
-	"\aGetUser\x12\x15.proto.GetUserRequest\x1a\v.proto.User\x123\n" +
+	"CreateUser\x12\x17.user.CreateUserRequest\x1a\n" +
+	".user.User\x12+\n" +
+	"\aGetUser\x12\x14.user.GetUserRequest\x1a\n" +
+	".user.User\x121\n" +
 	"\n" +
-	"UpdateUser\x12\x18.proto.UpdateUserRequest\x1a\v.proto.User\x12A\n" +
+	"UpdateUser\x12\x17.user.UpdateUserRequest\x1a\n" +
+	".user.User\x12?\n" +
 	"\n" +
-	"DeleteUser\x12\x18.proto.DeleteUserRequest\x1a\x19.proto.DeleteUserResponse\x12D\n" +
-	"\x0fLinkBankAccount\x12\x1d.proto.LinkBankAccountRequest\x1a\x12.proto.BankAccount\x12S\n" +
-	"\x10ListBankAccounts\x12\x1e.proto.ListBankAccountsRequest\x1a\x1f.proto.ListBankAccountsResponseB\x16Z\x14untether/proto;protob\x06proto3"
+	"DeleteUser\x12\x17.user.DeleteUserRequest\x1a\x18.user.DeleteUserResponse\x12B\n" +
+	"\x0fLinkBankAccount\x12\x1c.user.LinkBankAccountRequest\x1a\x11.user.BankAccount\x12Q\n" +
+	"\x10ListBankAccounts\x12\x1d.user.ListBankAccountsRequest\x1a\x1e.user.ListBankAccountsResponseB\x1eZ\x1cuntether/services/user/protob\x06proto3"
 
 var (
 	file_user_proto_rawDescOnce sync.Once
@@ -710,37 +713,37 @@ func file_user_proto_rawDescGZIP() []byte {
 
 var file_user_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_user_proto_goTypes = []any{
-	(*User)(nil),                     // 0: proto.User
-	(*BankAccount)(nil),              // 1: proto.BankAccount
-	(*CreateUserRequest)(nil),        // 2: proto.CreateUserRequest
-	(*GetUserRequest)(nil),           // 3: proto.GetUserRequest
-	(*UpdateUserRequest)(nil),        // 4: proto.UpdateUserRequest
-	(*DeleteUserRequest)(nil),        // 5: proto.DeleteUserRequest
-	(*DeleteUserResponse)(nil),       // 6: proto.DeleteUserResponse
-	(*LinkBankAccountRequest)(nil),   // 7: proto.LinkBankAccountRequest
-	(*ListBankAccountsRequest)(nil),  // 8: proto.ListBankAccountsRequest
-	(*ListBankAccountsResponse)(nil), // 9: proto.ListBankAccountsResponse
+	(*User)(nil),                     // 0: user.User
+	(*BankAccount)(nil),              // 1: user.BankAccount
+	(*CreateUserRequest)(nil),        // 2: user.CreateUserRequest
+	(*GetUserRequest)(nil),           // 3: user.GetUserRequest
+	(*UpdateUserRequest)(nil),        // 4: user.UpdateUserRequest
+	(*DeleteUserRequest)(nil),        // 5: user.DeleteUserRequest
+	(*DeleteUserResponse)(nil),       // 6: user.DeleteUserResponse
+	(*LinkBankAccountRequest)(nil),   // 7: user.LinkBankAccountRequest
+	(*ListBankAccountsRequest)(nil),  // 8: user.ListBankAccountsRequest
+	(*ListBankAccountsResponse)(nil), // 9: user.ListBankAccountsResponse
 	(*timestamppb.Timestamp)(nil),    // 10: google.protobuf.Timestamp
 }
 var file_user_proto_depIdxs = []int32{
-	10, // 0: proto.User.created_at:type_name -> google.protobuf.Timestamp
-	10, // 1: proto.User.updated_at:type_name -> google.protobuf.Timestamp
-	1,  // 2: proto.User.bank_accounts:type_name -> proto.BankAccount
-	10, // 3: proto.BankAccount.created_at:type_name -> google.protobuf.Timestamp
-	10, // 4: proto.BankAccount.updated_at:type_name -> google.protobuf.Timestamp
-	1,  // 5: proto.ListBankAccountsResponse.accounts:type_name -> proto.BankAccount
-	2,  // 6: proto.UserService.CreateUser:input_type -> proto.CreateUserRequest
-	3,  // 7: proto.UserService.GetUser:input_type -> proto.GetUserRequest
-	4,  // 8: proto.UserService.UpdateUser:input_type -> proto.UpdateUserRequest
-	5,  // 9: proto.UserService.DeleteUser:input_type -> proto.DeleteUserRequest
-	7,  // 10: proto.UserService.LinkBankAccount:input_type -> proto.LinkBankAccountRequest
-	8,  // 11: proto.UserService.ListBankAccounts:input_type -> proto.ListBankAccountsRequest
-	0,  // 12: proto.UserService.CreateUser:output_type -> proto.User
-	0,  // 13: proto.UserService.GetUser:output_type -> proto.User
-	0,  // 14: proto.UserService.UpdateUser:output_type -> proto.User
-	6,  // 15: proto.UserService.DeleteUser:output_type -> proto.DeleteUserResponse
-	1,  // 16: proto.UserService.LinkBankAccount:output_type -> proto.BankAccount
-	9,  // 17: proto.UserService.ListBankAccounts:output_type -> proto.ListBankAccountsResponse
+	10, // 0: user.User.created_at:type_name -> google.protobuf.Timestamp
+	10, // 1: user.User.updated_at:type_name -> google.protobuf.Timestamp
+	1,  // 2: user.User.bank_accounts:type_name -> user.BankAccount
+	10, // 3: user.BankAccount.created_at:type_name -> google.protobuf.Timestamp
+	10, // 4: user.BankAccount.updated_at:type_name -> google.protobuf.Timestamp
+	1,  // 5: user.ListBankAccountsResponse.accounts:type_name -> user.BankAccount
+	2,  // 6: user.UserService.CreateUser:input_type -> user.CreateUserRequest
+	3,  // 7: user.UserService.GetUser:input_type -> user.GetUserRequest
+	4,  // 8: user.UserService.UpdateUser:input_type -> user.UpdateUserRequest
+	5,  // 9: user.UserService.DeleteUser:input_type -> user.DeleteUserRequest
+	7,  // 10: user.UserService.LinkBankAccount:input_type -> user.LinkBankAccountRequest
+	8,  // 11: user.UserService.ListBankAccounts:input_type -> user.ListBankAccountsRequest
+	0,  // 12: user.UserService.CreateUser:output_type -> user.User
+	0,  // 13: user.UserService.GetUser:output_type -> user.User
+	0,  // 14: user.UserService.UpdateUser:output_type -> user.User
+	6,  // 15: user.UserService.DeleteUser:output_type -> user.DeleteUserResponse
+	1,  // 16: user.UserService.LinkBankAccount:output_type -> user.BankAccount
+	9,  // 17: user.UserService.ListBankAccounts:output_type -> user.ListBankAccountsResponse
 	12, // [12:18] is the sub-list for method output_type
 	6,  // [6:12] is the sub-list for method input_type
 	6,  // [6:6] is the sub-list for extension type_name

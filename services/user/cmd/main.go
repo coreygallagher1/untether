@@ -11,10 +11,9 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
-	"github.com/cgallagher/Untether/configs"
-	plaidClient "github.com/cgallagher/Untether/services/plaid/client"
-	user "github.com/cgallagher/Untether/services/user/internal"
-	pb "github.com/cgallagher/Untether/services/user/proto"
+	"untether/services/plaid/client"
+	"untether/services/user/internal"
+	pb "untether/services/user/proto"
 )
 
 var (
@@ -24,17 +23,8 @@ var (
 func main() {
 	flag.Parse()
 
-	// Load configuration
-	cfg, err := configs.LoadConfig()
-	if err != nil {
-		log.Fatalf("Failed to load config: %v", err)
-	}
-
 	// Initialize database connection
-	db, err := sql.Open("postgres", fmt.Sprintf(
-		"host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		cfg.DBHost, cfg.DBPort, cfg.DBUser, cfg.DBPassword, cfg.DBName,
-	))
+	db, err := sql.Open("postgres", "postgres://postgres:postgres@localhost:5432/untether?sslmode=disable")
 	if err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
@@ -46,25 +36,25 @@ func main() {
 	}
 
 	// Initialize Plaid client
-	plaid := plaidClient.NewPlaidClient(cfg.PlaidClientID, cfg.PlaidSecret, cfg.PlaidEnvironment)
-	if plaid == nil {
-		log.Fatalf("Failed to initialize Plaid client")
-	}
+	plaidClient := client.NewPlaidClient("client_id", "secret", "sandbox")
 
-	// Initialize gRPC server
+	// Initialize user service
+	userService := internal.NewUserService(db, plaidClient)
+
+	// Create gRPC server
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		log.Fatalf("Failed to listen: %v", err)
 	}
 
 	s := grpc.NewServer()
-	pb.RegisterUserServiceServer(s, user.NewUserService(db, plaid))
+	pb.RegisterUserServiceServer(s, userService)
 
 	// Register reflection service for gRPCurl
 	reflection.Register(s)
 
-	log.Printf("server listening at %v", lis.Addr())
+	log.Printf("Server listening at %v", lis.Addr())
 	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+		log.Fatalf("Failed to serve: %v", err)
 	}
 }

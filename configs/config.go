@@ -23,7 +23,7 @@ type Config struct {
 	HTTPPort int
 
 	// Plaid
-	PlaidClientID     string
+	PlaidClientID    string
 	PlaidSecret      string
 	PlaidEnvironment string
 }
@@ -46,7 +46,7 @@ func LoadConfig() (*Config, error) {
 		HTTPPort: getEnvAsIntOrDefault("HTTP_PORT", 8080),
 
 		// Plaid (optional during development)
-		PlaidClientID:     getEnvOrDefault("PLAID_CLIENT_ID", "development"),
+		PlaidClientID:    getEnvOrDefault("PLAID_CLIENT_ID", "development"),
 		PlaidSecret:      getEnvOrDefault("PLAID_SECRET", "development"),
 		PlaidEnvironment: getEnvOrDefault("PLAID_ENVIRONMENT", "sandbox"),
 	}
@@ -73,4 +73,4 @@ func getEnvAsIntOrDefault(key string, defaultValue int) int {
 		}
 	}
 	return defaultValue
-} 
+}

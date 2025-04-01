@@ -19,12 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	UserService_CreateUser_FullMethodName       = "/proto.UserService/CreateUser"
-	UserService_GetUser_FullMethodName          = "/proto.UserService/GetUser"
-	UserService_UpdateUser_FullMethodName       = "/proto.UserService/UpdateUser"
-	UserService_DeleteUser_FullMethodName       = "/proto.UserService/DeleteUser"
-	UserService_LinkBankAccount_FullMethodName  = "/proto.UserService/LinkBankAccount"
-	UserService_ListBankAccounts_FullMethodName = "/proto.UserService/ListBankAccounts"
+	UserService_CreateUser_FullMethodName       = "/user.UserService/CreateUser"
+	UserService_GetUser_FullMethodName          = "/user.UserService/GetUser"
+	UserService_UpdateUser_FullMethodName       = "/user.UserService/UpdateUser"
+	UserService_DeleteUser_FullMethodName       = "/user.UserService/DeleteUser"
+	UserService_LinkBankAccount_FullMethodName  = "/user.UserService/LinkBankAccount"
+	UserService_ListBankAccounts_FullMethodName = "/user.UserService/ListBankAccounts"
 )
 
 // UserServiceClient is the client API for UserService service.
@@ -261,7 +261,7 @@ func _UserService_ListBankAccounts_Handler(srv interface{}, ctx context.Context,
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var UserService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "proto.UserService",
+	ServiceName: "user.UserService",
 	HandlerType: (*UserServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

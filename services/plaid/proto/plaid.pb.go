@@ -249,7 +249,7 @@ func (x *GetAccountsRequest) GetAccessToken() string {
 	return ""
 }
 
-type Account struct {
+type BankAccount struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	AccountId     string                 `protobuf:"bytes,1,opt,name=account_id,json=accountId,proto3" json:"account_id,omitempty"`
 	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
@@ -260,20 +260,20 @@ type Account struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Account) Reset() {
-	*x = Account{}
+func (x *BankAccount) Reset() {
+	*x = BankAccount{}
 	mi := &file_plaid_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *Account) String() string {
+func (x *BankAccount) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Account) ProtoMessage() {}
+func (*BankAccount) ProtoMessage() {}
 
-func (x *Account) ProtoReflect() protoreflect.Message {
+func (x *BankAccount) ProtoReflect() protoreflect.Message {
 	mi := &file_plaid_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -285,40 +285,40 @@ func (x *Account) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Account.ProtoReflect.Descriptor instead.
-func (*Account) Descriptor() ([]byte, []int) {
+// Deprecated: Use BankAccount.ProtoReflect.Descriptor instead.
+func (*BankAccount) Descriptor() ([]byte, []int) {
 	return file_plaid_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *Account) GetAccountId() string {
+func (x *BankAccount) GetAccountId() string {
 	if x != nil {
 		return x.AccountId
 	}
 	return ""
 }
 
-func (x *Account) GetName() string {
+func (x *BankAccount) GetName() string {
 	if x != nil {
 		return x.Name
 	}
 	return ""
 }
 
-func (x *Account) GetType() string {
+func (x *BankAccount) GetType() string {
 	if x != nil {
 		return x.Type
 	}
 	return ""
 }
 
-func (x *Account) GetSubtype() string {
+func (x *BankAccount) GetSubtype() string {
 	if x != nil {
 		return x.Subtype
 	}
 	return ""
 }
 
-func (x *Account) GetMask() string {
+func (x *BankAccount) GetMask() string {
 	if x != nil {
 		return x.Mask
 	}
@@ -327,7 +327,7 @@ func (x *Account) GetMask() string {
 
 type GetAccountsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Accounts      []*Account             `protobuf:"bytes,1,rep,name=accounts,proto3" json:"accounts,omitempty"`
+	Accounts      []*BankAccount         `protobuf:"bytes,1,rep,name=accounts,proto3" json:"accounts,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -362,7 +362,7 @@ func (*GetAccountsResponse) Descriptor() ([]byte, []int) {
 	return file_plaid_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *GetAccountsResponse) GetAccounts() []*Account {
+func (x *GetAccountsResponse) GetAccounts() []*BankAccount {
 	if x != nil {
 		return x.Accounts
 	}
@@ -421,84 +421,16 @@ func (x *GetBalanceRequest) GetAccountId() string {
 	return ""
 }
 
-type Balance struct {
-	state           protoimpl.MessageState `protogen:"open.v1"`
-	Available       string                 `protobuf:"bytes,1,opt,name=available,proto3" json:"available,omitempty"`
-	Current         string                 `protobuf:"bytes,2,opt,name=current,proto3" json:"current,omitempty"`
-	Limit           string                 `protobuf:"bytes,3,opt,name=limit,proto3" json:"limit,omitempty"`
-	IsoCurrencyCode string                 `protobuf:"bytes,4,opt,name=iso_currency_code,json=isoCurrencyCode,proto3" json:"iso_currency_code,omitempty"`
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
-}
-
-func (x *Balance) Reset() {
-	*x = Balance{}
-	mi := &file_plaid_proto_msgTypes[8]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Balance) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Balance) ProtoMessage() {}
-
-func (x *Balance) ProtoReflect() protoreflect.Message {
-	mi := &file_plaid_proto_msgTypes[8]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Balance.ProtoReflect.Descriptor instead.
-func (*Balance) Descriptor() ([]byte, []int) {
-	return file_plaid_proto_rawDescGZIP(), []int{8}
-}
-
-func (x *Balance) GetAvailable() string {
-	if x != nil {
-		return x.Available
-	}
-	return ""
-}
-
-func (x *Balance) GetCurrent() string {
-	if x != nil {
-		return x.Current
-	}
-	return ""
-}
-
-func (x *Balance) GetLimit() string {
-	if x != nil {
-		return x.Limit
-	}
-	return ""
-}
-
-func (x *Balance) GetIsoCurrencyCode() string {
-	if x != nil {
-		return x.IsoCurrencyCode
-	}
-	return ""
-}
-
 type GetBalanceResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Balance       *Balance               `protobuf:"bytes,1,opt,name=balance,proto3" json:"balance,omitempty"`
+	Balance       float64                `protobuf:"fixed64,1,opt,name=balance,proto3" json:"balance,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GetBalanceResponse) Reset() {
 	*x = GetBalanceResponse{}
-	mi := &file_plaid_proto_msgTypes[9]
+	mi := &file_plaid_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -510,7 +442,7 @@ func (x *GetBalanceResponse) String() string {
 func (*GetBalanceResponse) ProtoMessage() {}
 
 func (x *GetBalanceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_plaid_proto_msgTypes[9]
+	mi := &file_plaid_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -523,21 +455,21 @@ func (x *GetBalanceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetBalanceResponse.ProtoReflect.Descriptor instead.
 func (*GetBalanceResponse) Descriptor() ([]byte, []int) {
-	return file_plaid_proto_rawDescGZIP(), []int{9}
+	return file_plaid_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *GetBalanceResponse) GetBalance() *Balance {
+func (x *GetBalanceResponse) GetBalance() float64 {
 	if x != nil {
 		return x.Balance
 	}
-	return nil
+	return 0
 }
 
 var File_plaid_proto protoreflect.FileDescriptor
 
 const file_plaid_proto_rawDesc = "" +
 	"\n" +
-	"\vplaid.proto\x12\x05proto\"1\n" +
+	"\vplaid.proto\x12\x05plaid\"1\n" +
 	"\x16CreateLinkTokenRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\"8\n" +
 	"\x17CreateLinkTokenResponse\x12\x1d\n" +
@@ -549,33 +481,28 @@ const file_plaid_proto_rawDesc = "" +
 	"\faccess_token\x18\x01 \x01(\tR\vaccessToken\x12\x17\n" +
 	"\aitem_id\x18\x02 \x01(\tR\x06itemId\"7\n" +
 	"\x12GetAccountsRequest\x12!\n" +
-	"\faccess_token\x18\x01 \x01(\tR\vaccessToken\"~\n" +
-	"\aAccount\x12\x1d\n" +
+	"\faccess_token\x18\x01 \x01(\tR\vaccessToken\"\x82\x01\n" +
+	"\vBankAccount\x12\x1d\n" +
 	"\n" +
 	"account_id\x18\x01 \x01(\tR\taccountId\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x12\n" +
 	"\x04type\x18\x03 \x01(\tR\x04type\x12\x18\n" +
 	"\asubtype\x18\x04 \x01(\tR\asubtype\x12\x12\n" +
-	"\x04mask\x18\x05 \x01(\tR\x04mask\"A\n" +
-	"\x13GetAccountsResponse\x12*\n" +
-	"\baccounts\x18\x01 \x03(\v2\x0e.proto.AccountR\baccounts\"U\n" +
+	"\x04mask\x18\x05 \x01(\tR\x04mask\"E\n" +
+	"\x13GetAccountsResponse\x12.\n" +
+	"\baccounts\x18\x01 \x03(\v2\x12.plaid.BankAccountR\baccounts\"U\n" +
 	"\x11GetBalanceRequest\x12!\n" +
 	"\faccess_token\x18\x01 \x01(\tR\vaccessToken\x12\x1d\n" +
 	"\n" +
-	"account_id\x18\x02 \x01(\tR\taccountId\"\x83\x01\n" +
-	"\aBalance\x12\x1c\n" +
-	"\tavailable\x18\x01 \x01(\tR\tavailable\x12\x18\n" +
-	"\acurrent\x18\x02 \x01(\tR\acurrent\x12\x14\n" +
-	"\x05limit\x18\x03 \x01(\tR\x05limit\x12*\n" +
-	"\x11iso_currency_code\x18\x04 \x01(\tR\x0fisoCurrencyCode\">\n" +
-	"\x12GetBalanceResponse\x12(\n" +
-	"\abalance\x18\x01 \x01(\v2\x0e.proto.BalanceR\abalance2\xc7\x02\n" +
+	"account_id\x18\x02 \x01(\tR\taccountId\".\n" +
+	"\x12GetBalanceResponse\x12\x18\n" +
+	"\abalance\x18\x01 \x01(\x01R\abalance2\xc7\x02\n" +
 	"\fPlaidService\x12P\n" +
-	"\x0fCreateLinkToken\x12\x1d.proto.CreateLinkTokenRequest\x1a\x1e.proto.CreateLinkTokenResponse\x12\\\n" +
-	"\x13ExchangePublicToken\x12!.proto.ExchangePublicTokenRequest\x1a\".proto.ExchangePublicTokenResponse\x12D\n" +
-	"\vGetAccounts\x12\x19.proto.GetAccountsRequest\x1a\x1a.proto.GetAccountsResponse\x12A\n" +
+	"\x0fCreateLinkToken\x12\x1d.plaid.CreateLinkTokenRequest\x1a\x1e.plaid.CreateLinkTokenResponse\x12\\\n" +
+	"\x13ExchangePublicToken\x12!.plaid.ExchangePublicTokenRequest\x1a\".plaid.ExchangePublicTokenResponse\x12D\n" +
+	"\vGetAccounts\x12\x19.plaid.GetAccountsRequest\x1a\x1a.plaid.GetAccountsResponse\x12A\n" +
 	"\n" +
-	"GetBalance\x12\x18.proto.GetBalanceRequest\x1a\x19.proto.GetBalanceResponseB5Z3github.com/cgallagher/Untether/services/plaid/protob\x06proto3"
+	"GetBalance\x12\x18.plaid.GetBalanceRequest\x1a\x19.plaid.GetBalanceResponseB\x1fZ\x1duntether/services/plaid/protob\x06proto3"
 
 var (
 	file_plaid_proto_rawDescOnce sync.Once
@@ -589,35 +516,33 @@ func file_plaid_proto_rawDescGZIP() []byte {
 	return file_plaid_proto_rawDescData
 }
 
-var file_plaid_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_plaid_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_plaid_proto_goTypes = []any{
-	(*CreateLinkTokenRequest)(nil),      // 0: proto.CreateLinkTokenRequest
-	(*CreateLinkTokenResponse)(nil),     // 1: proto.CreateLinkTokenResponse
-	(*ExchangePublicTokenRequest)(nil),  // 2: proto.ExchangePublicTokenRequest
-	(*ExchangePublicTokenResponse)(nil), // 3: proto.ExchangePublicTokenResponse
-	(*GetAccountsRequest)(nil),          // 4: proto.GetAccountsRequest
-	(*Account)(nil),                     // 5: proto.Account
-	(*GetAccountsResponse)(nil),         // 6: proto.GetAccountsResponse
-	(*GetBalanceRequest)(nil),           // 7: proto.GetBalanceRequest
-	(*Balance)(nil),                     // 8: proto.Balance
-	(*GetBalanceResponse)(nil),          // 9: proto.GetBalanceResponse
+	(*CreateLinkTokenRequest)(nil),      // 0: plaid.CreateLinkTokenRequest
+	(*CreateLinkTokenResponse)(nil),     // 1: plaid.CreateLinkTokenResponse
+	(*ExchangePublicTokenRequest)(nil),  // 2: plaid.ExchangePublicTokenRequest
+	(*ExchangePublicTokenResponse)(nil), // 3: plaid.ExchangePublicTokenResponse
+	(*GetAccountsRequest)(nil),          // 4: plaid.GetAccountsRequest
+	(*BankAccount)(nil),                 // 5: plaid.BankAccount
+	(*GetAccountsResponse)(nil),         // 6: plaid.GetAccountsResponse
+	(*GetBalanceRequest)(nil),           // 7: plaid.GetBalanceRequest
+	(*GetBalanceResponse)(nil),          // 8: plaid.GetBalanceResponse
 }
 var file_plaid_proto_depIdxs = []int32{
-	5, // 0: proto.GetAccountsResponse.accounts:type_name -> proto.Account
-	8, // 1: proto.GetBalanceResponse.balance:type_name -> proto.Balance
-	0, // 2: proto.PlaidService.CreateLinkToken:input_type -> proto.CreateLinkTokenRequest
-	2, // 3: proto.PlaidService.ExchangePublicToken:input_type -> proto.ExchangePublicTokenRequest
-	4, // 4: proto.PlaidService.GetAccounts:input_type -> proto.GetAccountsRequest
-	7, // 5: proto.PlaidService.GetBalance:input_type -> proto.GetBalanceRequest
-	1, // 6: proto.PlaidService.CreateLinkToken:output_type -> proto.CreateLinkTokenResponse
-	3, // 7: proto.PlaidService.ExchangePublicToken:output_type -> proto.ExchangePublicTokenResponse
-	6, // 8: proto.PlaidService.GetAccounts:output_type -> proto.GetAccountsResponse
-	9, // 9: proto.PlaidService.GetBalance:output_type -> proto.GetBalanceResponse
-	6, // [6:10] is the sub-list for method output_type
-	2, // [2:6] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	5, // 0: plaid.GetAccountsResponse.accounts:type_name -> plaid.BankAccount
+	0, // 1: plaid.PlaidService.CreateLinkToken:input_type -> plaid.CreateLinkTokenRequest
+	2, // 2: plaid.PlaidService.ExchangePublicToken:input_type -> plaid.ExchangePublicTokenRequest
+	4, // 3: plaid.PlaidService.GetAccounts:input_type -> plaid.GetAccountsRequest
+	7, // 4: plaid.PlaidService.GetBalance:input_type -> plaid.GetBalanceRequest
+	1, // 5: plaid.PlaidService.CreateLinkToken:output_type -> plaid.CreateLinkTokenResponse
+	3, // 6: plaid.PlaidService.ExchangePublicToken:output_type -> plaid.ExchangePublicTokenResponse
+	6, // 7: plaid.PlaidService.GetAccounts:output_type -> plaid.GetAccountsResponse
+	8, // 8: plaid.PlaidService.GetBalance:output_type -> plaid.GetBalanceResponse
+	5, // [5:9] is the sub-list for method output_type
+	1, // [1:5] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_plaid_proto_init() }
@@ -631,7 +556,7 @@ func file_plaid_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_plaid_proto_rawDesc), len(file_plaid_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   10,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

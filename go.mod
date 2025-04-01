@@ -1,11 +1,10 @@
-module github.com/cgallagher/Untether
+module untether
 
 go 1.21
 
 require (
 	github.com/google/uuid v1.6.0
 	github.com/lib/pq v1.10.9
-	github.com/mattn/go-sqlite3 v1.14.25
 	github.com/plaid/plaid-go/v14 v14.0.0
 	github.com/stretchr/testify v1.8.4
 	google.golang.org/grpc v1.62.1
@@ -13,6 +12,7 @@ require (
 )
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect

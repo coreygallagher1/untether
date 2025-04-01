@@ -1,4 +1,4 @@
-package internal
+package client
 
 import (
 	"context"
@@ -6,22 +6,38 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cgallagher/Untether/pkg/plaid"
 	plaidSDK "github.com/plaid/plaid-go/v14/plaid"
 )
 
-type plaidClient struct {
-	clientID     string
-	clientSecret string
-	environment  string
-	httpClient   *http.Client
-	sdkClient    *plaidSDK.APIClient
+// PlaidClient defines the interface for Plaid API interactions
+type PlaidClient interface {
+	CreateLinkToken(ctx context.Context, userId string) (string, error)
+	ExchangePublicToken(ctx context.Context, publicToken string) (string, error)
+	GetAccounts(ctx context.Context, accessToken string) ([]BankAccount, error)
+	GetBalance(ctx context.Context, accessToken string, accountId string) (float64, error)
 }
 
-func NewPlaidClient(clientID, clientSecret, environment string) plaid.PlaidClient {
+// BankAccount represents a bank account from Plaid
+type BankAccount struct {
+	AccountID string
+	Name      string
+	Type      string
+	Subtype   string
+	Mask      string
+}
+
+type plaidClient struct {
+	clientID    string
+	secret      string
+	environment string
+	httpClient  *http.Client
+	sdkClient   *plaidSDK.APIClient
+}
+
+func NewPlaidClient(clientID, secret, environment string) PlaidClient {
 	configuration := plaidSDK.NewConfiguration()
 	configuration.AddDefaultHeader("PLAID-CLIENT-ID", clientID)
-	configuration.AddDefaultHeader("PLAID-SECRET", clientSecret)
+	configuration.AddDefaultHeader("PLAID-SECRET", secret)
 
 	// Set the environment
 	var env plaidSDK.Environment
@@ -37,16 +53,21 @@ func NewPlaidClient(clientID, clientSecret, environment string) plaid.PlaidClien
 	}
 	configuration.UseEnvironment(env)
 
-	client := &plaidClient{
-		clientID:     clientID,
-		clientSecret: clientSecret,
-		environment:  environment,
-		httpClient: &http.Client{
-			Timeout: 10 * time.Second,
-		},
-		sdkClient: plaidSDK.NewAPIClient(configuration),
+	// Create HTTP client with timeout
+	httpClient := &http.Client{
+		Timeout: time.Second * 30,
 	}
-	return client
+
+	// Create Plaid client
+	sdkClient := plaidSDK.NewAPIClient(configuration)
+
+	return &plaidClient{
+		clientID:    clientID,
+		secret:      secret,
+		environment: environment,
+		httpClient:  httpClient,
+		sdkClient:   sdkClient,
+	}
 }
 
 // CreateLinkToken creates a link token for initializing Plaid Link
@@ -61,7 +82,7 @@ func (c *plaidClient) CreateLinkToken(ctx context.Context, userId string) (strin
 		[]plaidSDK.CountryCode{plaidSDK.COUNTRYCODE_US},
 		user,
 	)
-	request.SetProducts([]plaidSDK.Products{plaidSDK.PRODUCTS_AUTH})
+	request.SetProducts([]plaidSDK.Products{plaidSDK.PRODUCTS_AUTH, plaidSDK.PRODUCTS_TRANSACTIONS})
 
 	response, _, err := c.sdkClient.PlaidApi.LinkTokenCreate(ctx).LinkTokenCreateRequest(*request).Execute()
 	if err != nil {
@@ -74,6 +95,7 @@ func (c *plaidClient) CreateLinkToken(ctx context.Context, userId string) (strin
 // ExchangePublicToken exchanges a public token for an access token
 func (c *plaidClient) ExchangePublicToken(ctx context.Context, publicToken string) (string, error) {
 	request := plaidSDK.NewItemPublicTokenExchangeRequest(publicToken)
+
 	response, _, err := c.sdkClient.PlaidApi.ItemPublicTokenExchange(ctx).ItemPublicTokenExchangeRequest(*request).Execute()
 	if err != nil {
 		return "", fmt.Errorf("failed to exchange public token: %v", err)
@@ -83,34 +105,23 @@ func (c *plaidClient) ExchangePublicToken(ctx context.Context, publicToken strin
 }
 
 // GetAccounts retrieves all accounts associated with an access token
-func (c *plaidClient) GetAccounts(ctx context.Context, accessToken string) ([]plaid.BankAccount, error) {
+func (c *plaidClient) GetAccounts(ctx context.Context, accessToken string) ([]BankAccount, error) {
 	request := plaidSDK.NewAccountsGetRequest(accessToken)
+
 	response, _, err := c.sdkClient.PlaidApi.AccountsGet(ctx).AccountsGetRequest(*request).Execute()
 	if err != nil {
 		return nil, fmt.Errorf("failed to get accounts: %v", err)
 	}
 
-	var accounts []plaid.BankAccount
-	for _, acc := range response.GetAccounts() {
-		balance := 0.0
-		if acc.Balances.Current.IsSet() {
-			balance = *acc.Balances.Current.Get()
+	accounts := make([]BankAccount, len(response.GetAccounts()))
+	for i, account := range response.GetAccounts() {
+		accounts[i] = BankAccount{
+			AccountID: account.GetAccountId(),
+			Name:      account.GetName(),
+			Type:      string(account.GetType()),
+			Subtype:   string(account.GetSubtype()),
+			Mask:      account.GetMask(),
 		}
-
-		currency := "USD"
-		if acc.Balances.IsoCurrencyCode.IsSet() {
-			currency = *acc.Balances.IsoCurrencyCode.Get()
-		}
-
-		accounts = append(accounts, plaid.BankAccount{
-			ID:          acc.GetAccountId(),
-			Name:        acc.GetName(),
-			Type:        string(acc.GetType()),
-			Subtype:     string(acc.GetSubtype()),
-			Balance:     balance,
-			Currency:    currency,
-			LastUpdated: time.Now(),
-		})
 	}
 
 	return accounts, nil
@@ -118,20 +129,21 @@ func (c *plaidClient) GetAccounts(ctx context.Context, accessToken string) ([]pl
 
 // GetBalance retrieves the current balance for a specific account
 func (c *plaidClient) GetBalance(ctx context.Context, accessToken string, accountId string) (float64, error) {
-	request := plaidSDK.NewAccountsGetRequest(accessToken)
-	response, _, err := c.sdkClient.PlaidApi.AccountsGet(ctx).AccountsGetRequest(*request).Execute()
+	request := plaidSDK.NewAccountsBalanceGetRequest(accessToken)
+
+	response, _, err := c.sdkClient.PlaidApi.AccountsBalanceGet(ctx).AccountsBalanceGetRequest(*request).Execute()
 	if err != nil {
-		return 0, fmt.Errorf("failed to get account balance: %v", err)
+		return 0, fmt.Errorf("failed to get balance: %v", err)
 	}
 
-	for _, acc := range response.GetAccounts() {
-		if acc.GetAccountId() == accountId {
-			if acc.Balances.Current.IsSet() {
-				return *acc.Balances.Current.Get(), nil
+	for _, account := range response.GetAccounts() {
+		if account.GetAccountId() == accountId {
+			if account.Balances.Current.IsSet() {
+				return *account.Balances.Current.Get(), nil
 			}
 			return 0, nil
 		}
 	}
 
-	return 0, fmt.Errorf("account not found: %s", accountId)
+	return 0, fmt.Errorf("account not found")
 }

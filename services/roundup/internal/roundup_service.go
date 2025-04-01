@@ -5,17 +5,23 @@ import (
 	"database/sql"
 	"math"
 
-	pb "github.com/cgallagher/Untether/services/roundup/proto"
+	pb "untether/services/roundup/proto"
+
 	"github.com/google/uuid"
 	_ "github.com/lib/pq"
 )
 
-type RoundupService struct {
-	pb.UnimplementedRoundupServiceServer
-	db *sql.DB
+// DB is an interface that matches the methods we need from sql.DB
+type DB interface {
+	ExecContext(ctx context.Context, query string, args ...interface{}) (sql.Result, error)
 }
 
-func NewRoundupService(db *sql.DB) *RoundupService {
+type RoundupService struct {
+	pb.UnimplementedRoundupServiceServer
+	db DB
+}
+
+func NewRoundupService(db DB) *RoundupService {
 	return &RoundupService{
 		db: db,
 	}
