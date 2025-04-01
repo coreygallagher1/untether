@@ -2,18 +2,57 @@ syntax = "proto3";
 
 package proto;
 
-option go_package = "untether/proto;proto";
+option go_package = "untether/proto";
 
 service RoundupService {
-  rpc RoundupTransaction(RoundupRequest) returns (RoundupResponse);
+  rpc CalculateRoundup (CalculateRoundupRequest) returns (CalculateRoundupResponse);
+  rpc ProcessRoundups (ProcessRoundupsRequest) returns (ProcessRoundupsResponse);
+  rpc GetRoundupHistory (GetRoundupHistoryRequest) returns (GetRoundupHistoryResponse);
 }
 
-message RoundupRequest {
+message Transaction {
+  string id = 1;
+  string account_id = 2;
+  string amount = 3;
+  string date = 4;
+  string description = 5;
+}
+
+message Roundup {
+  string id = 1;
+  string user_id = 2;
+  string transaction_id = 3;
+  string original_amount = 4;
+  string roundup_amount = 5;
+  string created_at = 6;
+  string status = 7;
+}
+
+message CalculateRoundupRequest {
+  Transaction transaction = 1;
+}
+
+message CalculateRoundupResponse {
+  string roundup_amount = 1;
+}
+
+message ProcessRoundupsRequest {
   string user_id = 1;
-  double transaction_amount = 2;
+  repeated Transaction transactions = 2;
 }
 
-message RoundupResponse {
-  string roundup_id = 1;
-  double amount_rounded = 2;
+message ProcessRoundupsResponse {
+  repeated Roundup roundups = 1;
+  string total_roundup_amount = 2;
 }
+
+message GetRoundupHistoryRequest {
+  string user_id = 1;
+  string start_date = 2;
+  string end_date = 3;
+}
+
+message GetRoundupHistoryResponse {
+  repeated Roundup roundups = 1;
+  string total_roundup_amount = 2;
+} 

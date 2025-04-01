@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "untether/proto";
+
+service PlaidService {
+  rpc CreateLinkToken (CreateLinkTokenRequest) returns (CreateLinkTokenResponse);
+  rpc ExchangePublicToken (ExchangePublicTokenRequest) returns (ExchangePublicTokenResponse);
+  rpc GetAccounts (GetAccountsRequest) returns (GetAccountsResponse);
+  rpc GetBalance (GetBalanceRequest) returns (GetBalanceResponse);
+}
+
+message CreateLinkTokenRequest {
+  string user_id = 1;
+}
+
+message CreateLinkTokenResponse {
+  string link_token = 1;
+}
+
+message ExchangePublicTokenRequest {
+  string public_token = 1;
+}
+
+message ExchangePublicTokenResponse {
+  string access_token = 1;
+  string item_id = 2;
+}
+
+message GetAccountsRequest {
+  string access_token = 1;
+}
+
+message Account {
+  string account_id = 1;
+  string name = 2;
+  string type = 3;
+  string subtype = 4;
+  string mask = 5;
+}
+
+message GetAccountsResponse {
+  repeated Account accounts = 1;
+}
+
+message GetBalanceRequest {
+  string access_token = 1;
+  string account_id = 2;
+}
+
+message Balance {
+  string available = 1;
+  string current = 2;
+  string limit = 3;
+  string iso_currency_code = 4;
+}
+
+message GetBalanceResponse {
+  Balance balance = 1;
+} 
