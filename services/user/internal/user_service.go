@@ -319,6 +319,11 @@ func (s *UserService) ListBankAccounts(ctx context.Context, req *pb.ListBankAcco
 
 // getUserAccessToken retrieves the Plaid access token for a user from the database
 func (s *UserService) getUserAccessToken(ctx context.Context, userID string) (string, error) {
+	// Validate UUID
+	if _, err := uuid.Parse(userID); err != nil {
+		return "", status.Errorf(codes.InvalidArgument, "invalid UUID: %v", err)
+	}
+
 	// TODO: Implement database lookup for user's Plaid access token
 	// For now, return a mock token
 	return "access-sandbox-123", nil
