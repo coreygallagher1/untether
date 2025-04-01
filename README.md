@@ -21,9 +21,6 @@ untether/
 ├── cmd/                    # Application entrypoints
 ├── internal/              # Private application code
 │   ├── proto/            # Generated protobuf code
-│   ├── roundup/          # Roundup service implementation
-│   ├── service/          # Service implementations
-│   ├── transaction/      # Transaction service implementation
 │   └── user/             # User service implementation
 ├── migrations/           # Database migrations
 ├── proto/               # Protobuf definitions
