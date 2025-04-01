@@ -13,8 +13,9 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	"untether/configs"
+	"untether/internal/plaid"
 	"untether/internal/service"
-	pb "untether/internal/proto"
+	pb "untether/proto"
 )
 
 var (
@@ -45,6 +46,12 @@ func main() {
 		log.Fatalf("Failed to ping database: %v", err)
 	}
 
+	// Initialize Plaid client
+	plaidClient, err := plaid.NewClient(cfg.PlaidClientID, cfg.PlaidSecret, cfg.PlaidEnvironment)
+	if err != nil {
+		log.Fatalf("Failed to initialize Plaid client: %v", err)
+	}
+
 	// Create gRPC server
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
 	if err != nil {
@@ -54,7 +61,7 @@ func main() {
 	s := grpc.NewServer()
 
 	// Register services
-	pb.RegisterUserServiceServer(s, service.NewUserService(db))
+	pb.RegisterUserServiceServer(s, service.NewUserService(db, plaidClient))
 
 	// Register reflection service for development
 	reflection.Register(s)
@@ -63,4 +70,4 @@ func main() {
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("Failed to serve: %v", err)
 	}
-} 
+}

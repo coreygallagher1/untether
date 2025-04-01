@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -13,16 +14,21 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
-	pb "untether/internal/proto"
+	"untether/internal/plaid"
+	pb "untether/proto"
 )
 
 type UserService struct {
 	pb.UnimplementedUserServiceServer
-	db *sql.DB
+	db          *sql.DB
+	plaidClient plaid.PlaidClient
 }
 
-func NewUserService(db *sql.DB) *UserService {
-	return &UserService{db: db}
+func NewUserService(db *sql.DB, plaidClient plaid.PlaidClient) *UserService {
+	return &UserService{
+		db:          db,
+		plaidClient: plaidClient,
+	}
 }
 
 func (s *UserService) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.User, error) {
@@ -190,21 +196,61 @@ func (s *UserService) LinkBankAccount(ctx context.Context, req *pb.LinkBankAccou
 		return nil, status.Error(codes.InvalidArgument, "user_id, plaid_access_token, and plaid_account_id are required")
 	}
 
-	// TODO: Use Plaid API to get account details
-	// For now, we'll create a placeholder account
+	// Check if user exists
+	var exists bool
+	err := s.db.QueryRowContext(ctx, "SELECT EXISTS(SELECT 1 FROM users WHERE id = $1)", req.UserId).Scan(&exists)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to check user existence: %v", err)
+	}
+	if !exists {
+		return nil, status.Error(codes.NotFound, "user not found")
+	}
+
+	// Check if account is already linked
+	err = s.db.QueryRowContext(ctx,
+		"SELECT EXISTS(SELECT 1 FROM bank_accounts WHERE user_id = $1 AND plaid_account_id = $2)",
+		req.UserId, req.PlaidAccountId,
+	).Scan(&exists)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to check account existence: %v", err)
+	}
+	if exists {
+		return nil, status.Error(codes.AlreadyExists, "bank account already linked")
+	}
+
+	// Get account details from Plaid
+	plaidAccount, err := s.plaidClient.GetAccountDetails(ctx, req.PlaidAccessToken, req.PlaidAccountId)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to get account details from Plaid: %v", err)
+	}
+
+	// Convert Plaid account type to string (uppercase)
+	accountType := strings.ToUpper(string(plaidAccount.GetType()))
+
+	// Get balance and currency, with defaults if not available
+	var balance float64
+	if plaidAccount.Balances.Current.IsSet() {
+		balance = *plaidAccount.Balances.Current.Get()
+	}
+
+	currency := "USD" // Default currency
+	if plaidAccount.Balances.IsoCurrencyCode.IsSet() {
+		currency = *plaidAccount.Balances.IsoCurrencyCode.Get()
+	}
+
 	account := &pb.BankAccount{
 		Id:             uuid.New().String(),
 		UserId:         req.UserId,
 		PlaidAccountId: req.PlaidAccountId,
-		Name:           "Checking Account", // This should come from Plaid
-		Type:           "checking",         // This should come from Plaid
-		Balance:        0.0,                // This should come from Plaid
-		Currency:       "USD",
+		Name:           plaidAccount.GetName(),
+		Type:           accountType,
+		Balance:        balance,
+		Currency:       currency,
 		IsActive:       true,
 	}
 
 	var createdAt, updatedAt time.Time
-	err := s.db.QueryRowContext(ctx,
+	err = s.db.QueryRowContext(ctx,
 		`INSERT INTO bank_accounts 
 		 (id, user_id, plaid_account_id, name, type, balance, currency, is_active) 
 		 VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
