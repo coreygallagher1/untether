@@ -25,7 +25,7 @@ const (
 type CalculateRoundupRequest struct {
 	state                protoimpl.MessageState `protogen:"open.v1"`
 	Amount               float64                `protobuf:"fixed64,1,opt,name=amount,proto3" json:"amount,omitempty"`
-	RoundingRule         string                 `protobuf:"bytes,2,opt,name=rounding_rule,json=roundingRule,proto3" json:"rounding_rule,omitempty"`                             // e.g., "dollar", "quarter", "custom"
+	RoundingRule         string                 `protobuf:"bytes,2,opt,name=rounding_rule,json=roundingRule,proto3" json:"rounding_rule,omitempty"`                             // e.g., "dollar", "custom"
 	CustomRoundingAmount float64                `protobuf:"fixed64,3,opt,name=custom_rounding_amount,json=customRoundingAmount,proto3" json:"custom_rounding_amount,omitempty"` // Optional, used when rounding_rule is "custom"
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache

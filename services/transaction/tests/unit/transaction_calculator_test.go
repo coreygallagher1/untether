@@ -30,13 +30,6 @@ func TestCalculateRoundup(t *testing.T) {
 			expectError:     false,
 		},
 		{
-			name:            "Round up to quarter",
-			amount:          4.55,
-			roundingRule:    "quarter",
-			expectedRoundup: 0.20,
-			expectError:     false,
-		},
-		{
 			name:            "Custom rounding",
 			amount:          4.55,
 			roundingRule:    "custom",

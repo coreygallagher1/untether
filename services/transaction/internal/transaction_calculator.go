@@ -31,8 +31,6 @@ func (c *TransactionCalculator) CalculateRoundup(ctx context.Context, req *pb.Ca
 	switch roundingRule {
 	case "dollar":
 		roundedAmount = math.Ceil(req.Amount)
-	case "quarter":
-		roundedAmount = math.Ceil(req.Amount*4) / 4
 	case "custom":
 		if req.CustomRoundingAmount <= 0 {
 			return nil, status.Error(codes.InvalidArgument, "custom rounding amount must be positive")

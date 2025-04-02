@@ -13,7 +13,7 @@ service TransactionCalculator {
 // CalculateRoundupRequest contains the transaction details needed for roundup calculation
 message CalculateRoundupRequest {
   double amount = 1;
-  string rounding_rule = 2;  // e.g., "dollar", "quarter", "custom"
+  string rounding_rule = 2;  // e.g., "dollar", "custom"
   double custom_rounding_amount = 3;  // Optional, used when rounding_rule is "custom"
 }
 
