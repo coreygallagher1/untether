@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package transaction;
+
+option go_package = "untether/services/transaction/proto";
+
+// TransactionCalculator service handles roundup calculations for transactions
+service TransactionCalculator {
+  // CalculateRoundup calculates the roundup amount for a given transaction
+  rpc CalculateRoundup(CalculateRoundupRequest) returns (CalculateRoundupResponse) {}
+}
+
+// CalculateRoundupRequest contains the transaction details needed for roundup calculation
+message CalculateRoundupRequest {
+  double amount = 1;
+  string rounding_rule = 2;  // e.g., "dollar", "quarter", "custom"
+  double custom_rounding_amount = 3;  // Optional, used when rounding_rule is "custom"
+}
+
+// CalculateRoundupResponse contains the calculated roundup amount
+message CalculateRoundupResponse {
+  double original_amount = 1;
+  double rounded_amount = 2;
+  double roundup_amount = 3;
+  string rounding_rule_used = 4;
+} 

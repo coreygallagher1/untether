@@ -35,7 +35,7 @@ MIGRATE_DATABASE_URL=postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/
 # Service ports
 USER_PORT=50051
 PLAID_PORT=50052
-ROUNDUP_PORT=50053
+TRANSACTION_PORT=50053
 
 # Default target
 all: test build
@@ -52,7 +52,7 @@ dev-cleanup:
 	@echo "Cleaning up development environment..."
 	$(MAKE) docker-down
 	$(GOCLEAN)
-	rm -rf user-service plaid-service roundup-service
+	rm -rf user-service plaid-service transaction-service
 	rm -rf services/*/proto/*.pb.go
 	@echo "Development environment cleaned up"
 
@@ -64,7 +64,7 @@ build-services:
 	@echo "Building all services..."
 	$(GOBUILD) -o user-service ./services/user/cmd
 	$(GOBUILD) -o plaid-service ./services/plaid/cmd
-	$(GOBUILD) -o roundup-service ./services/roundup/cmd
+	$(GOBUILD) -o transaction-service ./services/transaction/cmd
 
 # Docker Commands
 # --------------
@@ -76,7 +76,7 @@ docker-up:
 	@echo "Running database migrations..."
 	docker compose exec -T postgres migrate -database "$(MIGRATE_DATABASE_URL)" -path /migrations/user up
 	docker compose exec -T postgres migrate -database "$(MIGRATE_DATABASE_URL)" -path /migrations/plaid up
-	docker compose exec -T postgres migrate -database "$(MIGRATE_DATABASE_URL)" -path /migrations/roundup up
+	docker compose exec -T postgres migrate -database "$(MIGRATE_DATABASE_URL)" -path /migrations/transaction up
 	@echo "Starting remaining services..."
 	docker compose up -d
 
@@ -88,7 +88,7 @@ docker-build:
 	@echo "Building Docker images..."
 	docker build -t untether-user-service -f services/user/Dockerfile .
 	docker build -t untether-plaid-service -f services/plaid/Dockerfile .
-	docker build -t untether-roundup-service -f services/roundup/Dockerfile .
+	docker build -t untether-transaction-service -f services/transaction/Dockerfile .
 
 # Service Logs
 # -----------
@@ -102,13 +102,13 @@ migrate-up:
 	@echo "Running database migrations..."
 	docker compose exec -T postgres migrate -database "$(MIGRATE_DATABASE_URL)" -path /migrations/user up
 	docker compose exec -T postgres migrate -database "$(MIGRATE_DATABASE_URL)" -path /migrations/plaid up
-	docker compose exec -T postgres migrate -database "$(MIGRATE_DATABASE_URL)" -path /migrations/roundup up
+	docker compose exec -T postgres migrate -database "$(MIGRATE_DATABASE_URL)" -path /migrations/transaction up
 
 migrate-down:
 	@echo "Rolling back database migrations..."
 	docker compose exec -T postgres migrate -database "$(MIGRATE_DATABASE_URL)" -path /migrations/user down
 	docker compose exec -T postgres migrate -database "$(MIGRATE_DATABASE_URL)" -path /migrations/plaid down
-	docker compose exec -T postgres migrate -database "$(MIGRATE_DATABASE_URL)" -path /migrations/roundup down
+	docker compose exec -T postgres migrate -database "$(MIGRATE_DATABASE_URL)" -path /migrations/transaction down
 
 db-create:
 	@echo "Creating database..."
@@ -144,9 +144,9 @@ proto-services:
 	$(PROTOC) -I./services/plaid/proto --go_out=./services/plaid/proto --go_opt=paths=source_relative \
 		--go-grpc_out=./services/plaid/proto --go-grpc_opt=paths=source_relative \
 		./services/plaid/proto/plaid.proto
-	$(PROTOC) -I./services/roundup/proto --go_out=./services/roundup/proto --go_opt=paths=source_relative \
-		--go-grpc_out=./services/roundup/proto --go-grpc_opt=paths=source_relative \
-		./services/roundup/proto/roundup.proto
+	$(PROTOC) -I./services/transaction/proto --go_out=./services/transaction/proto --go_opt=paths=source_relative \
+		--go-grpc_out=./services/transaction/proto --go-grpc_opt=paths=source_relative \
+		./services/transaction/proto/transaction.proto
 
 # Code Quality
 # -----------

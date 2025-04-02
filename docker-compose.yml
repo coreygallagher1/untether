@@ -1,17 +1,19 @@
+version: '3.8'
+
 services:
   postgres:
-    image: postgres:15-alpine
+    image: postgres:14-alpine
     environment:
-      POSTGRES_USER: untether
-      POSTGRES_PASSWORD: untether
-      POSTGRES_DB: untether
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     ports:
-      - "5432:5432"
+      - "${DB_PORT}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./services/user/migrations:/migrations/user
       - ./services/plaid/migrations:/migrations/plaid
-      - ./services/roundup/migrations:/migrations/roundup
+      - ./services/transaction/migrations:/migrations/transaction
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U untether"]
       interval: 5s
@@ -50,60 +52,52 @@ services:
       timeout: 10s
       retries: 3
 
-  user-service:
+  user:
     build:
       context: .
       dockerfile: services/user/Dockerfile
-    ports:
-      - "50051:50051"
     environment:
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_USER=untether
-      - DB_PASSWORD=untether
-      - DB_NAME=untether
-      - KAFKA_BROKERS=kafka:29092
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+    ports:
+      - "${USER_PORT}:50051"
     depends_on:
       postgres:
         condition: service_healthy
       kafka:
         condition: service_healthy
 
-  plaid-service:
+  plaid:
     build:
       context: .
       dockerfile: services/plaid/Dockerfile
-    ports:
-      - "50052:50052"
     environment:
-      - PLAID_CLIENT_ID=${PLAID_CLIENT_ID}
-      - PLAID_CLIENT_SECRET=${PLAID_CLIENT_SECRET}
-      - PLAID_ENVIRONMENT=${PLAID_ENVIRONMENT:-sandbox}
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_USER=untether
-      - DB_PASSWORD=untether
-      - DB_NAME=untether
-      - KAFKA_BROKERS=kafka:29092
+      PLAID_CLIENT_ID: ${PLAID_CLIENT_ID}
+      PLAID_SECRET: ${PLAID_SECRET}
+      PLAID_ENV: ${PLAID_ENV}
+    ports:
+      - "${PLAID_PORT}:50051"
     depends_on:
       postgres:
         condition: service_healthy
       kafka:
         condition: service_healthy
 
-  roundup-service:
+  transaction:
     build:
       context: .
-      dockerfile: services/roundup/Dockerfile
-    ports:
-      - "50053:50053"
+      dockerfile: services/transaction/Dockerfile
     environment:
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_USER=untether
-      - DB_PASSWORD=untether
-      - DB_NAME=untether
-      - KAFKA_BROKERS=kafka:29092
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+    ports:
+      - "${TRANSACTION_PORT}:50051"
     depends_on:
       postgres:
         condition: service_healthy
