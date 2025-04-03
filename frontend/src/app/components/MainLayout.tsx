@@ -29,18 +29,18 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
             alignItems: 'center', 
             gap: 2,
             '& img': {
-              filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.4))',
+              filter: 'drop-shadow(0 0 5px rgba(255, 255, 255, 0.6))',
               transition: 'filter 0.3s ease',
               '&:hover': {
-                filter: 'drop-shadow(0 0 15px rgba(255, 255, 255, 0.6))',
+                filter: 'drop-shadow(0 0 25px rgba(255, 255, 255, 0.8))',
               }
             }
           }}>
             <Image
               src="/assets/UntetherLogo.png"
               alt="Untether Logo"
-              width={48}
-              height={48}
+              width={56}
+              height={56}
               style={{ objectFit: 'contain' }}
             />
             <Typography 
