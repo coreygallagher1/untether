@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "untether/services/user/proto";
+
+import "google/protobuf/timestamp.proto";
+
+service UserService {
+  rpc CreateUser(CreateUserRequest) returns (User);
+  rpc GetUser(GetUserRequest) returns (User);
+  rpc UpdateUser(UpdateUserRequest) returns (User);
+  rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse);
+  rpc LinkBankAccount(LinkBankAccountRequest) returns (BankAccount);
+  rpc ListBankAccounts(ListBankAccountsRequest) returns (ListBankAccountsResponse);
+}
+
+message User {
+  string id = 1;
+  string email = 2;
+  string first_name = 3;
+  string last_name = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+  repeated BankAccount bank_accounts = 7;
+}
+
+message BankAccount {
+  string id = 1;
+  string user_id = 2;
+  string plaid_account_id = 3;
+  string name = 4;
+  string type = 5;
+  double balance = 6;
+  string currency = 7;
+  bool is_active = 8;
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp updated_at = 10;
+}
+
+message CreateUserRequest {
+  string email = 1;
+  string first_name = 2;
+  string last_name = 3;
+}
+
+message GetUserRequest {
+  string id = 1;
+}
+
+message UpdateUserRequest {
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+}
+
+message DeleteUserRequest {
+  string id = 1;
+}
+
+message DeleteUserResponse {
+  bool success = 1;
+}
+
+message LinkBankAccountRequest {
+  string user_id = 1;
+  string plaid_access_token = 2;
+  string plaid_account_id = 3;
+}
+
+message ListBankAccountsRequest {
+  string user_id = 1;
+}
+
+message ListBankAccountsResponse {
+  repeated BankAccount accounts = 1;
+} 

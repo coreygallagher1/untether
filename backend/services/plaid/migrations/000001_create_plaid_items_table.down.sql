@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS plaid_items; 
