@@ -12,6 +12,7 @@ Our platform goes beyond traditional banking apps by focusing on three core pill
 Ideas for Potential Features to be Implemented:
 
 # Financial Planning & Tools
+- Add functionality for additional automated payments.
 - Enable budget categories with customizable spending limits and alerts
 - Add automated bill payment reminders and due date tracking
 - Create an emergency fund calculator and savings planner
