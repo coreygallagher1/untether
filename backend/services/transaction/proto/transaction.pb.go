@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.6
 // 	protoc        v5.29.3
-// source: services/transaction/proto/transaction.proto
+// source: transaction.proto
 
 package proto
 
@@ -33,7 +33,7 @@ type CalculateRoundupRequest struct {
 
 func (x *CalculateRoundupRequest) Reset() {
 	*x = CalculateRoundupRequest{}
-	mi := &file_services_transaction_proto_transaction_proto_msgTypes[0]
+	mi := &file_transaction_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -45,7 +45,7 @@ func (x *CalculateRoundupRequest) String() string {
 func (*CalculateRoundupRequest) ProtoMessage() {}
 
 func (x *CalculateRoundupRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_services_transaction_proto_transaction_proto_msgTypes[0]
+	mi := &file_transaction_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -58,7 +58,7 @@ func (x *CalculateRoundupRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CalculateRoundupRequest.ProtoReflect.Descriptor instead.
 func (*CalculateRoundupRequest) Descriptor() ([]byte, []int) {
-	return file_services_transaction_proto_transaction_proto_rawDescGZIP(), []int{0}
+	return file_transaction_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *CalculateRoundupRequest) GetAmount() float64 {
@@ -95,7 +95,7 @@ type CalculateRoundupResponse struct {
 
 func (x *CalculateRoundupResponse) Reset() {
 	*x = CalculateRoundupResponse{}
-	mi := &file_services_transaction_proto_transaction_proto_msgTypes[1]
+	mi := &file_transaction_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -107,7 +107,7 @@ func (x *CalculateRoundupResponse) String() string {
 func (*CalculateRoundupResponse) ProtoMessage() {}
 
 func (x *CalculateRoundupResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_services_transaction_proto_transaction_proto_msgTypes[1]
+	mi := &file_transaction_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -120,7 +120,7 @@ func (x *CalculateRoundupResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CalculateRoundupResponse.ProtoReflect.Descriptor instead.
 func (*CalculateRoundupResponse) Descriptor() ([]byte, []int) {
-	return file_services_transaction_proto_transaction_proto_rawDescGZIP(), []int{1}
+	return file_transaction_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *CalculateRoundupResponse) GetOriginalAmount() float64 {
@@ -151,11 +151,11 @@ func (x *CalculateRoundupResponse) GetRoundingRuleUsed() string {
 	return ""
 }
 
-var File_services_transaction_proto_transaction_proto protoreflect.FileDescriptor
+var File_transaction_proto protoreflect.FileDescriptor
 
-const file_services_transaction_proto_transaction_proto_rawDesc = "" +
+const file_transaction_proto_rawDesc = "" +
 	"\n" +
-	",services/transaction/proto/transaction.proto\x12\vtransaction\"\x8c\x01\n" +
+	"\x11transaction.proto\x12\vtransaction\"\x8c\x01\n" +
 	"\x17CalculateRoundupRequest\x12\x16\n" +
 	"\x06amount\x18\x01 \x01(\x01R\x06amount\x12#\n" +
 	"\rrounding_rule\x18\x02 \x01(\tR\froundingRule\x124\n" +
@@ -169,23 +169,23 @@ const file_services_transaction_proto_transaction_proto_rawDesc = "" +
 	"\x10CalculateRoundup\x12$.transaction.CalculateRoundupRequest\x1a%.transaction.CalculateRoundupResponse\"\x00B%Z#untether/services/transaction/protob\x06proto3"
 
 var (
-	file_services_transaction_proto_transaction_proto_rawDescOnce sync.Once
-	file_services_transaction_proto_transaction_proto_rawDescData []byte
+	file_transaction_proto_rawDescOnce sync.Once
+	file_transaction_proto_rawDescData []byte
 )
 
-func file_services_transaction_proto_transaction_proto_rawDescGZIP() []byte {
-	file_services_transaction_proto_transaction_proto_rawDescOnce.Do(func() {
-		file_services_transaction_proto_transaction_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_services_transaction_proto_transaction_proto_rawDesc), len(file_services_transaction_proto_transaction_proto_rawDesc)))
+func file_transaction_proto_rawDescGZIP() []byte {
+	file_transaction_proto_rawDescOnce.Do(func() {
+		file_transaction_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_transaction_proto_rawDesc), len(file_transaction_proto_rawDesc)))
 	})
-	return file_services_transaction_proto_transaction_proto_rawDescData
+	return file_transaction_proto_rawDescData
 }
 
-var file_services_transaction_proto_transaction_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_services_transaction_proto_transaction_proto_goTypes = []any{
+var file_transaction_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_transaction_proto_goTypes = []any{
 	(*CalculateRoundupRequest)(nil),  // 0: transaction.CalculateRoundupRequest
 	(*CalculateRoundupResponse)(nil), // 1: transaction.CalculateRoundupResponse
 }
-var file_services_transaction_proto_transaction_proto_depIdxs = []int32{
+var file_transaction_proto_depIdxs = []int32{
 	0, // 0: transaction.TransactionCalculator.CalculateRoundup:input_type -> transaction.CalculateRoundupRequest
 	1, // 1: transaction.TransactionCalculator.CalculateRoundup:output_type -> transaction.CalculateRoundupResponse
 	1, // [1:2] is the sub-list for method output_type
@@ -195,26 +195,26 @@ var file_services_transaction_proto_transaction_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_services_transaction_proto_transaction_proto_init() }
-func file_services_transaction_proto_transaction_proto_init() {
-	if File_services_transaction_proto_transaction_proto != nil {
+func init() { file_transaction_proto_init() }
+func file_transaction_proto_init() {
+	if File_transaction_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_services_transaction_proto_transaction_proto_rawDesc), len(file_services_transaction_proto_transaction_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_transaction_proto_rawDesc), len(file_transaction_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_services_transaction_proto_transaction_proto_goTypes,
-		DependencyIndexes: file_services_transaction_proto_transaction_proto_depIdxs,
-		MessageInfos:      file_services_transaction_proto_transaction_proto_msgTypes,
+		GoTypes:           file_transaction_proto_goTypes,
+		DependencyIndexes: file_transaction_proto_depIdxs,
+		MessageInfos:      file_transaction_proto_msgTypes,
 	}.Build()
-	File_services_transaction_proto_transaction_proto = out.File
-	file_services_transaction_proto_transaction_proto_goTypes = nil
-	file_services_transaction_proto_transaction_proto_depIdxs = nil
+	File_transaction_proto = out.File
+	file_transaction_proto_goTypes = nil
+	file_transaction_proto_depIdxs = nil
 }

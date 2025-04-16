@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v5.29.3
-// source: services/plaid/proto/plaid.proto
+// source: plaid.proto
 
 package proto
 
@@ -216,5 +216,5 @@ var PlaidService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "services/plaid/proto/plaid.proto",
+	Metadata: "plaid.proto",
 }

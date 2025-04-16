@@ -6,15 +6,32 @@ option go_package = "untether/services/user/proto";
 
 import "google/protobuf/timestamp.proto";
 
+// Service definition
 service UserService {
+  // User operations
   rpc CreateUser(CreateUserRequest) returns (User);
   rpc GetUser(GetUserRequest) returns (User);
   rpc UpdateUser(UpdateUserRequest) returns (User);
   rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse);
+
+  // User preferences operations
+  rpc CreateUserPreferences(CreateUserPreferencesRequest) returns (UserPreferences);
+  rpc GetUserPreferences(GetUserPreferencesRequest) returns (UserPreferences);
+  rpc UpdateUserPreferences(UpdateUserPreferencesRequest) returns (UserPreferences);
+  rpc DeleteUserPreferences(DeleteUserPreferencesRequest) returns (DeleteUserPreferencesResponse);
+
+  // Notification preferences operations
+  rpc CreateNotificationPreferences(CreateNotificationPreferencesRequest) returns (NotificationPreferences);
+  rpc GetNotificationPreferences(GetNotificationPreferencesRequest) returns (NotificationPreferences);
+  rpc UpdateNotificationPreferences(UpdateNotificationPreferencesRequest) returns (NotificationPreferences);
+  rpc DeleteNotificationPreferences(DeleteNotificationPreferencesRequest) returns (DeleteNotificationPreferencesResponse);
+
+  // Bank account operations
   rpc LinkBankAccount(LinkBankAccountRequest) returns (BankAccount);
   rpc ListBankAccounts(ListBankAccountsRequest) returns (ListBankAccountsResponse);
 }
 
+// Core user messages
 message User {
   string id = 1;
   string email = 2;
@@ -25,19 +42,7 @@ message User {
   repeated BankAccount bank_accounts = 7;
 }
 
-message BankAccount {
-  string id = 1;
-  string user_id = 2;
-  string plaid_account_id = 3;
-  string name = 4;
-  string type = 5;
-  double balance = 6;
-  string currency = 7;
-  bool is_active = 8;
-  google.protobuf.Timestamp created_at = 9;
-  google.protobuf.Timestamp updated_at = 10;
-}
-
+// User request/response messages
 message CreateUserRequest {
   string email = 1;
   string first_name = 2;
@@ -50,8 +55,9 @@ message GetUserRequest {
 
 message UpdateUserRequest {
   string id = 1;
-  string first_name = 2;
-  string last_name = 3;
+  string email = 2;
+  string first_name = 3;
+  string last_name = 4;
 }
 
 message DeleteUserRequest {
@@ -60,6 +66,98 @@ message DeleteUserRequest {
 
 message DeleteUserResponse {
   bool success = 1;
+}
+
+// User preferences messages
+message UserPreferences {
+  string currency = 1;
+  string timezone = 2;
+  string language = 3;
+  bool dark_mode = 4;
+  double budget = 5;
+}
+
+message CreateUserPreferencesRequest {
+  string user_id = 1;
+  string currency = 2;
+  string timezone = 3;
+  string language = 4;
+  bool dark_mode = 5;
+  double budget = 6;
+}
+
+message GetUserPreferencesRequest {
+  string user_id = 1;
+}
+
+message UpdateUserPreferencesRequest {
+  string user_id = 1;
+  string currency = 2;
+  string timezone = 3;
+  string language = 4;
+  bool dark_mode = 5;
+  double budget = 6;
+}
+
+message DeleteUserPreferencesRequest {
+  string user_id = 1;
+}
+
+message DeleteUserPreferencesResponse {
+  bool success = 1;
+}
+
+// Notification preferences messages
+message NotificationPreferences {
+  bool notifications_enabled = 1;
+  bool sms_notifications = 2;
+  bool push_notifications = 3;
+  bool email_notifications = 4;
+  repeated string notification_types = 5; // ["large_transaction", "budget_alert", "savings_goal", "weekly_summary", etc]
+}
+
+message CreateNotificationPreferencesRequest {
+  string user_id = 1;
+  bool notifications_enabled = 2;
+  bool sms_notifications = 3;
+  bool push_notifications = 4;
+  bool email_notifications = 5;
+  repeated string notification_types = 6;
+}
+
+message GetNotificationPreferencesRequest {
+  string user_id = 1;
+}
+
+message UpdateNotificationPreferencesRequest {
+  string user_id = 1;
+  bool notifications_enabled = 2;
+  bool sms_notifications = 3;
+  bool push_notifications = 4;
+  bool email_notifications = 5;
+  repeated string notification_types = 6;
+}
+
+message DeleteNotificationPreferencesRequest {
+  string user_id = 1;
+}
+
+message DeleteNotificationPreferencesResponse {
+  bool success = 1;
+}
+
+// Bank account messages
+message BankAccount {
+  string id = 1;
+  string user_id = 2;
+  string plaid_account_id = 3;
+  string name = 4;
+  string type = 5;
+  double balance = 6;
+  string currency = 7;
+  bool is_active = 8;
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp updated_at = 10;
 }
 
 message LinkBankAccountRequest {

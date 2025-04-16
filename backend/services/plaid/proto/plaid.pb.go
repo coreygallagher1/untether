@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.6
 // 	protoc        v5.29.3
-// source: services/plaid/proto/plaid.proto
+// source: plaid.proto
 
 package proto
 
@@ -30,7 +30,7 @@ type CreateLinkTokenRequest struct {
 
 func (x *CreateLinkTokenRequest) Reset() {
 	*x = CreateLinkTokenRequest{}
-	mi := &file_services_plaid_proto_plaid_proto_msgTypes[0]
+	mi := &file_plaid_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -42,7 +42,7 @@ func (x *CreateLinkTokenRequest) String() string {
 func (*CreateLinkTokenRequest) ProtoMessage() {}
 
 func (x *CreateLinkTokenRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_services_plaid_proto_plaid_proto_msgTypes[0]
+	mi := &file_plaid_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -55,7 +55,7 @@ func (x *CreateLinkTokenRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateLinkTokenRequest.ProtoReflect.Descriptor instead.
 func (*CreateLinkTokenRequest) Descriptor() ([]byte, []int) {
-	return file_services_plaid_proto_plaid_proto_rawDescGZIP(), []int{0}
+	return file_plaid_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *CreateLinkTokenRequest) GetUserId() string {
@@ -74,7 +74,7 @@ type CreateLinkTokenResponse struct {
 
 func (x *CreateLinkTokenResponse) Reset() {
 	*x = CreateLinkTokenResponse{}
-	mi := &file_services_plaid_proto_plaid_proto_msgTypes[1]
+	mi := &file_plaid_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -86,7 +86,7 @@ func (x *CreateLinkTokenResponse) String() string {
 func (*CreateLinkTokenResponse) ProtoMessage() {}
 
 func (x *CreateLinkTokenResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_services_plaid_proto_plaid_proto_msgTypes[1]
+	mi := &file_plaid_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -99,7 +99,7 @@ func (x *CreateLinkTokenResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateLinkTokenResponse.ProtoReflect.Descriptor instead.
 func (*CreateLinkTokenResponse) Descriptor() ([]byte, []int) {
-	return file_services_plaid_proto_plaid_proto_rawDescGZIP(), []int{1}
+	return file_plaid_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *CreateLinkTokenResponse) GetLinkToken() string {
@@ -118,7 +118,7 @@ type ExchangePublicTokenRequest struct {
 
 func (x *ExchangePublicTokenRequest) Reset() {
 	*x = ExchangePublicTokenRequest{}
-	mi := &file_services_plaid_proto_plaid_proto_msgTypes[2]
+	mi := &file_plaid_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -130,7 +130,7 @@ func (x *ExchangePublicTokenRequest) String() string {
 func (*ExchangePublicTokenRequest) ProtoMessage() {}
 
 func (x *ExchangePublicTokenRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_services_plaid_proto_plaid_proto_msgTypes[2]
+	mi := &file_plaid_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -143,7 +143,7 @@ func (x *ExchangePublicTokenRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExchangePublicTokenRequest.ProtoReflect.Descriptor instead.
 func (*ExchangePublicTokenRequest) Descriptor() ([]byte, []int) {
-	return file_services_plaid_proto_plaid_proto_rawDescGZIP(), []int{2}
+	return file_plaid_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *ExchangePublicTokenRequest) GetPublicToken() string {
@@ -163,7 +163,7 @@ type ExchangePublicTokenResponse struct {
 
 func (x *ExchangePublicTokenResponse) Reset() {
 	*x = ExchangePublicTokenResponse{}
-	mi := &file_services_plaid_proto_plaid_proto_msgTypes[3]
+	mi := &file_plaid_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -175,7 +175,7 @@ func (x *ExchangePublicTokenResponse) String() string {
 func (*ExchangePublicTokenResponse) ProtoMessage() {}
 
 func (x *ExchangePublicTokenResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_services_plaid_proto_plaid_proto_msgTypes[3]
+	mi := &file_plaid_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -188,7 +188,7 @@ func (x *ExchangePublicTokenResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExchangePublicTokenResponse.ProtoReflect.Descriptor instead.
 func (*ExchangePublicTokenResponse) Descriptor() ([]byte, []int) {
-	return file_services_plaid_proto_plaid_proto_rawDescGZIP(), []int{3}
+	return file_plaid_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *ExchangePublicTokenResponse) GetAccessToken() string {
@@ -214,7 +214,7 @@ type GetAccountsRequest struct {
 
 func (x *GetAccountsRequest) Reset() {
 	*x = GetAccountsRequest{}
-	mi := &file_services_plaid_proto_plaid_proto_msgTypes[4]
+	mi := &file_plaid_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -226,7 +226,7 @@ func (x *GetAccountsRequest) String() string {
 func (*GetAccountsRequest) ProtoMessage() {}
 
 func (x *GetAccountsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_services_plaid_proto_plaid_proto_msgTypes[4]
+	mi := &file_plaid_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -239,7 +239,7 @@ func (x *GetAccountsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetAccountsRequest.ProtoReflect.Descriptor instead.
 func (*GetAccountsRequest) Descriptor() ([]byte, []int) {
-	return file_services_plaid_proto_plaid_proto_rawDescGZIP(), []int{4}
+	return file_plaid_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *GetAccountsRequest) GetAccessToken() string {
@@ -262,7 +262,7 @@ type BankAccount struct {
 
 func (x *BankAccount) Reset() {
 	*x = BankAccount{}
-	mi := &file_services_plaid_proto_plaid_proto_msgTypes[5]
+	mi := &file_plaid_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -274,7 +274,7 @@ func (x *BankAccount) String() string {
 func (*BankAccount) ProtoMessage() {}
 
 func (x *BankAccount) ProtoReflect() protoreflect.Message {
-	mi := &file_services_plaid_proto_plaid_proto_msgTypes[5]
+	mi := &file_plaid_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -287,7 +287,7 @@ func (x *BankAccount) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BankAccount.ProtoReflect.Descriptor instead.
 func (*BankAccount) Descriptor() ([]byte, []int) {
-	return file_services_plaid_proto_plaid_proto_rawDescGZIP(), []int{5}
+	return file_plaid_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *BankAccount) GetAccountId() string {
@@ -334,7 +334,7 @@ type GetAccountsResponse struct {
 
 func (x *GetAccountsResponse) Reset() {
 	*x = GetAccountsResponse{}
-	mi := &file_services_plaid_proto_plaid_proto_msgTypes[6]
+	mi := &file_plaid_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -346,7 +346,7 @@ func (x *GetAccountsResponse) String() string {
 func (*GetAccountsResponse) ProtoMessage() {}
 
 func (x *GetAccountsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_services_plaid_proto_plaid_proto_msgTypes[6]
+	mi := &file_plaid_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -359,7 +359,7 @@ func (x *GetAccountsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetAccountsResponse.ProtoReflect.Descriptor instead.
 func (*GetAccountsResponse) Descriptor() ([]byte, []int) {
-	return file_services_plaid_proto_plaid_proto_rawDescGZIP(), []int{6}
+	return file_plaid_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *GetAccountsResponse) GetAccounts() []*BankAccount {
@@ -379,7 +379,7 @@ type GetBalanceRequest struct {
 
 func (x *GetBalanceRequest) Reset() {
 	*x = GetBalanceRequest{}
-	mi := &file_services_plaid_proto_plaid_proto_msgTypes[7]
+	mi := &file_plaid_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -391,7 +391,7 @@ func (x *GetBalanceRequest) String() string {
 func (*GetBalanceRequest) ProtoMessage() {}
 
 func (x *GetBalanceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_services_plaid_proto_plaid_proto_msgTypes[7]
+	mi := &file_plaid_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -404,7 +404,7 @@ func (x *GetBalanceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetBalanceRequest.ProtoReflect.Descriptor instead.
 func (*GetBalanceRequest) Descriptor() ([]byte, []int) {
-	return file_services_plaid_proto_plaid_proto_rawDescGZIP(), []int{7}
+	return file_plaid_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *GetBalanceRequest) GetAccessToken() string {
@@ -430,7 +430,7 @@ type GetBalanceResponse struct {
 
 func (x *GetBalanceResponse) Reset() {
 	*x = GetBalanceResponse{}
-	mi := &file_services_plaid_proto_plaid_proto_msgTypes[8]
+	mi := &file_plaid_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -442,7 +442,7 @@ func (x *GetBalanceResponse) String() string {
 func (*GetBalanceResponse) ProtoMessage() {}
 
 func (x *GetBalanceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_services_plaid_proto_plaid_proto_msgTypes[8]
+	mi := &file_plaid_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -455,7 +455,7 @@ func (x *GetBalanceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetBalanceResponse.ProtoReflect.Descriptor instead.
 func (*GetBalanceResponse) Descriptor() ([]byte, []int) {
-	return file_services_plaid_proto_plaid_proto_rawDescGZIP(), []int{8}
+	return file_plaid_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *GetBalanceResponse) GetBalance() float64 {
@@ -465,11 +465,11 @@ func (x *GetBalanceResponse) GetBalance() float64 {
 	return 0
 }
 
-var File_services_plaid_proto_plaid_proto protoreflect.FileDescriptor
+var File_plaid_proto protoreflect.FileDescriptor
 
-const file_services_plaid_proto_plaid_proto_rawDesc = "" +
+const file_plaid_proto_rawDesc = "" +
 	"\n" +
-	" services/plaid/proto/plaid.proto\x12\x05plaid\"1\n" +
+	"\vplaid.proto\x12\x05plaid\"1\n" +
 	"\x16CreateLinkTokenRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\"8\n" +
 	"\x17CreateLinkTokenResponse\x12\x1d\n" +
@@ -505,19 +505,19 @@ const file_services_plaid_proto_plaid_proto_rawDesc = "" +
 	"GetBalance\x12\x18.plaid.GetBalanceRequest\x1a\x19.plaid.GetBalanceResponseB\x1fZ\x1duntether/services/plaid/protob\x06proto3"
 
 var (
-	file_services_plaid_proto_plaid_proto_rawDescOnce sync.Once
-	file_services_plaid_proto_plaid_proto_rawDescData []byte
+	file_plaid_proto_rawDescOnce sync.Once
+	file_plaid_proto_rawDescData []byte
 )
 
-func file_services_plaid_proto_plaid_proto_rawDescGZIP() []byte {
-	file_services_plaid_proto_plaid_proto_rawDescOnce.Do(func() {
-		file_services_plaid_proto_plaid_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_services_plaid_proto_plaid_proto_rawDesc), len(file_services_plaid_proto_plaid_proto_rawDesc)))
+func file_plaid_proto_rawDescGZIP() []byte {
+	file_plaid_proto_rawDescOnce.Do(func() {
+		file_plaid_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_plaid_proto_rawDesc), len(file_plaid_proto_rawDesc)))
 	})
-	return file_services_plaid_proto_plaid_proto_rawDescData
+	return file_plaid_proto_rawDescData
 }
 
-var file_services_plaid_proto_plaid_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
-var file_services_plaid_proto_plaid_proto_goTypes = []any{
+var file_plaid_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_plaid_proto_goTypes = []any{
 	(*CreateLinkTokenRequest)(nil),      // 0: plaid.CreateLinkTokenRequest
 	(*CreateLinkTokenResponse)(nil),     // 1: plaid.CreateLinkTokenResponse
 	(*ExchangePublicTokenRequest)(nil),  // 2: plaid.ExchangePublicTokenRequest
@@ -528,7 +528,7 @@ var file_services_plaid_proto_plaid_proto_goTypes = []any{
 	(*GetBalanceRequest)(nil),           // 7: plaid.GetBalanceRequest
 	(*GetBalanceResponse)(nil),          // 8: plaid.GetBalanceResponse
 }
-var file_services_plaid_proto_plaid_proto_depIdxs = []int32{
+var file_plaid_proto_depIdxs = []int32{
 	5, // 0: plaid.GetAccountsResponse.accounts:type_name -> plaid.BankAccount
 	0, // 1: plaid.PlaidService.CreateLinkToken:input_type -> plaid.CreateLinkTokenRequest
 	2, // 2: plaid.PlaidService.ExchangePublicToken:input_type -> plaid.ExchangePublicTokenRequest
@@ -545,26 +545,26 @@ var file_services_plaid_proto_plaid_proto_depIdxs = []int32{
 	0, // [0:1] is the sub-list for field type_name
 }
 
-func init() { file_services_plaid_proto_plaid_proto_init() }
-func file_services_plaid_proto_plaid_proto_init() {
-	if File_services_plaid_proto_plaid_proto != nil {
+func init() { file_plaid_proto_init() }
+func file_plaid_proto_init() {
+	if File_plaid_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_services_plaid_proto_plaid_proto_rawDesc), len(file_services_plaid_proto_plaid_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_plaid_proto_rawDesc), len(file_plaid_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_services_plaid_proto_plaid_proto_goTypes,
-		DependencyIndexes: file_services_plaid_proto_plaid_proto_depIdxs,
-		MessageInfos:      file_services_plaid_proto_plaid_proto_msgTypes,
+		GoTypes:           file_plaid_proto_goTypes,
+		DependencyIndexes: file_plaid_proto_depIdxs,
+		MessageInfos:      file_plaid_proto_msgTypes,
 	}.Build()
-	File_services_plaid_proto_plaid_proto = out.File
-	file_services_plaid_proto_plaid_proto_goTypes = nil
-	file_services_plaid_proto_plaid_proto_depIdxs = nil
+	File_plaid_proto = out.File
+	file_plaid_proto_goTypes = nil
+	file_plaid_proto_depIdxs = nil
 }

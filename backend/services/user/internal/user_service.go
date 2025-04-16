@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
+	"slices"
 	"time"
 
 	"github.com/google/uuid"
@@ -24,12 +25,16 @@ type DB interface {
 	QueryContext(ctx context.Context, query string, args ...interface{}) (*sql.Rows, error)
 }
 
+// UserService implements the UserServiceServer interface
 type UserService struct {
 	pb.UnimplementedUserServiceServer
 	db          DB
 	plaidClient client.PlaidClient
 }
 
+func (s *UserService) mustEmbedUnimplementedUserServiceServer() {}
+
+// NewUserService creates a new UserService
 func NewUserService(db DB, plaidClient client.PlaidClient) *UserService {
 	return &UserService{
 		db:          db,
@@ -216,6 +221,73 @@ func (s *UserService) DeleteUser(ctx context.Context, req *pb.DeleteUserRequest)
 	return &pb.DeleteUserResponse{
 		Success: rowsAffected > 0,
 	}, nil
+}
+
+func (s *UserService) CreateUserPreferences(ctx context.Context, req *pb.CreateUserPreferencesRequest) (*pb.UserPreferences, error) {
+	// Validate required fields
+	if req.UserId == "" {
+		return nil, status.Error(codes.InvalidArgument, "user_id is required")
+	}
+
+	validCurrencies := []string{"USD"}
+	if !slices.Contains(validCurrencies, req.Currency) {
+		return nil, status.Error(codes.InvalidArgument, "Invalid currency")
+	}
+
+	validTimezones := []string{"UTC"}
+	if !slices.Contains(validTimezones, req.Timezone) {
+		return nil, status.Error(codes.InvalidArgument, "Invalid timezone")
+	}
+
+	validLanguages := []string{"en"}
+	if !slices.Contains(validLanguages, req.Language) {
+		return nil, status.Error(codes.InvalidArgument, "Invalid language")
+	}
+
+	if req.Budget <= 0 {
+		return nil, status.Error(codes.InvalidArgument, "Budget must be greater than 0")
+	}
+
+	// Check if user exists
+	var userExists bool
+	err := s.db.QueryRowContext(ctx, "SELECT EXISTS(SELECT 1 FROM users WHERE id = $1)", req.UserId).Scan(&userExists)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to check user existence: %v", err)
+	}
+	if !userExists {
+		return nil, status.Error(codes.NotFound, "User not found")
+	}
+
+	// Check if preferences already exist
+	var preferencesExists bool
+	err = s.db.QueryRowContext(ctx, "SELECT EXISTS(SELECT 1 FROM user_preferences WHERE user_id = $1)", req.UserId).Scan(&preferencesExists)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to check user preferences existence: %v", err)
+	}
+	if preferencesExists {
+		return nil, status.Error(codes.AlreadyExists, "User preferences already exist")
+	}
+
+	// Create user preferences
+	now := time.Now()
+	userPreferences := &pb.UserPreferences{
+		Currency: req.Currency,
+		Timezone: req.Timezone,
+		Language: req.Language,
+		DarkMode: req.DarkMode,
+		Budget:   req.Budget,
+	}
+
+	// Insert user preferences into database
+	_, err = s.db.ExecContext(ctx,
+		"INSERT INTO user_preferences (user_id, currency, timezone, language, dark_mode, budget, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
+		req.UserId, userPreferences.Currency, userPreferences.Timezone, userPreferences.Language, userPreferences.DarkMode, userPreferences.Budget, now, now,
+	)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to create user preferences: %v", err)
+	}
+
+	return userPreferences, nil
 }
 
 func (s *UserService) LinkBankAccount(ctx context.Context, req *pb.LinkBankAccountRequest) (*pb.BankAccount, error) {

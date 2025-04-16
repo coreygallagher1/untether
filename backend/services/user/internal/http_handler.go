@@ -23,14 +23,23 @@ func NewHTTPHandler(userService *UserService) *HTTPHandler {
 }
 
 func (h *HTTPHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	switch r.Method {
-	case http.MethodPost:
-		h.handleCreateUser(w, r)
-	case http.MethodGet:
+	path := strings.TrimPrefix(r.URL.Path, "/api/v1")
+
+	if r.Method == http.MethodPost {
+		switch path {
+		case "/users":
+			h.handleCreateUser(w, r)
+			return
+		case "/users/preferences":
+			h.handleCreateUserPreferences(w, r)
+			return
+		}
+	} else if r.Method == http.MethodGet && strings.HasPrefix(path, "/users/") {
 		h.handleGetUser(w, r)
-	default:
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
 	}
+
+	http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 }
 
 func (h *HTTPHandler) handleGetUser(w http.ResponseWriter, r *http.Request) {
@@ -104,6 +113,45 @@ func (h *HTTPHandler) handleCreateUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	if err := json.NewEncoder(w).Encode(user); err != nil {
+		log.Printf("Error encoding response: %v", err)
+		http.Error(w, "Error encoding response", http.StatusInternalServerError)
+		return
+	}
+}
+
+func (h *HTTPHandler) handleCreateUserPreferences(w http.ResponseWriter, r *http.Request) {
+	var req struct {
+		UserId   string  `json:"user_id"`
+		Currency string  `json:"currency"`
+		Timezone string  `json:"timezone"`
+		Language string  `json:"language"`
+		DarkMode bool    `json:"dark_mode"`
+		Budget   float64 `json:"budget"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		log.Printf("Error decoding request body: %v", err)
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	userPreferences, err := h.userService.CreateUserPreferences(r.Context(), &pb.CreateUserPreferencesRequest{
+		UserId:   req.UserId,
+		Currency: req.Currency,
+		Timezone: req.Timezone,
+		Language: req.Language,
+		DarkMode: req.DarkMode,
+		Budget:   req.Budget,
+	})
+	if err != nil {
+		log.Printf("Error creating user preferences: %v", err)
+		http.Error(w, "Internal server error: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	if err := json.NewEncoder(w).Encode(userPreferences); err != nil {
 		log.Printf("Error encoding response: %v", err)
 		http.Error(w, "Error encoding response", http.StatusInternalServerError)
 		return

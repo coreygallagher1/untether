@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v5.29.3
-// source: services/user/proto/user.proto
+// source: user.proto
 
 package proto
 
@@ -19,22 +19,42 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	UserService_CreateUser_FullMethodName       = "/user.UserService/CreateUser"
-	UserService_GetUser_FullMethodName          = "/user.UserService/GetUser"
-	UserService_UpdateUser_FullMethodName       = "/user.UserService/UpdateUser"
-	UserService_DeleteUser_FullMethodName       = "/user.UserService/DeleteUser"
-	UserService_LinkBankAccount_FullMethodName  = "/user.UserService/LinkBankAccount"
-	UserService_ListBankAccounts_FullMethodName = "/user.UserService/ListBankAccounts"
+	UserService_CreateUser_FullMethodName                    = "/user.UserService/CreateUser"
+	UserService_GetUser_FullMethodName                       = "/user.UserService/GetUser"
+	UserService_UpdateUser_FullMethodName                    = "/user.UserService/UpdateUser"
+	UserService_DeleteUser_FullMethodName                    = "/user.UserService/DeleteUser"
+	UserService_CreateUserPreferences_FullMethodName         = "/user.UserService/CreateUserPreferences"
+	UserService_GetUserPreferences_FullMethodName            = "/user.UserService/GetUserPreferences"
+	UserService_UpdateUserPreferences_FullMethodName         = "/user.UserService/UpdateUserPreferences"
+	UserService_DeleteUserPreferences_FullMethodName         = "/user.UserService/DeleteUserPreferences"
+	UserService_CreateNotificationPreferences_FullMethodName = "/user.UserService/CreateNotificationPreferences"
+	UserService_GetNotificationPreferences_FullMethodName    = "/user.UserService/GetNotificationPreferences"
+	UserService_UpdateNotificationPreferences_FullMethodName = "/user.UserService/UpdateNotificationPreferences"
+	UserService_DeleteNotificationPreferences_FullMethodName = "/user.UserService/DeleteNotificationPreferences"
+	UserService_LinkBankAccount_FullMethodName               = "/user.UserService/LinkBankAccount"
+	UserService_ListBankAccounts_FullMethodName              = "/user.UserService/ListBankAccounts"
 )
 
 // UserServiceClient is the client API for UserService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserServiceClient interface {
+	// User operations
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*User, error)
 	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*User, error)
 	UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*User, error)
 	DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...grpc.CallOption) (*DeleteUserResponse, error)
+	// User preferences operations
+	CreateUserPreferences(ctx context.Context, in *CreateUserPreferencesRequest, opts ...grpc.CallOption) (*UserPreferences, error)
+	GetUserPreferences(ctx context.Context, in *GetUserPreferencesRequest, opts ...grpc.CallOption) (*UserPreferences, error)
+	UpdateUserPreferences(ctx context.Context, in *UpdateUserPreferencesRequest, opts ...grpc.CallOption) (*UserPreferences, error)
+	DeleteUserPreferences(ctx context.Context, in *DeleteUserPreferencesRequest, opts ...grpc.CallOption) (*DeleteUserPreferencesResponse, error)
+	// Notification preferences operations
+	CreateNotificationPreferences(ctx context.Context, in *CreateNotificationPreferencesRequest, opts ...grpc.CallOption) (*NotificationPreferences, error)
+	GetNotificationPreferences(ctx context.Context, in *GetNotificationPreferencesRequest, opts ...grpc.CallOption) (*NotificationPreferences, error)
+	UpdateNotificationPreferences(ctx context.Context, in *UpdateNotificationPreferencesRequest, opts ...grpc.CallOption) (*NotificationPreferences, error)
+	DeleteNotificationPreferences(ctx context.Context, in *DeleteNotificationPreferencesRequest, opts ...grpc.CallOption) (*DeleteNotificationPreferencesResponse, error)
+	// Bank account operations
 	LinkBankAccount(ctx context.Context, in *LinkBankAccountRequest, opts ...grpc.CallOption) (*BankAccount, error)
 	ListBankAccounts(ctx context.Context, in *ListBankAccountsRequest, opts ...grpc.CallOption) (*ListBankAccountsResponse, error)
 }
@@ -83,6 +103,78 @@ func (c *userServiceClient) DeleteUser(ctx context.Context, in *DeleteUserReques
 	return out, nil
 }
 
+func (c *userServiceClient) CreateUserPreferences(ctx context.Context, in *CreateUserPreferencesRequest, opts ...grpc.CallOption) (*UserPreferences, error) {
+	out := new(UserPreferences)
+	err := c.cc.Invoke(ctx, UserService_CreateUserPreferences_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) GetUserPreferences(ctx context.Context, in *GetUserPreferencesRequest, opts ...grpc.CallOption) (*UserPreferences, error) {
+	out := new(UserPreferences)
+	err := c.cc.Invoke(ctx, UserService_GetUserPreferences_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) UpdateUserPreferences(ctx context.Context, in *UpdateUserPreferencesRequest, opts ...grpc.CallOption) (*UserPreferences, error) {
+	out := new(UserPreferences)
+	err := c.cc.Invoke(ctx, UserService_UpdateUserPreferences_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) DeleteUserPreferences(ctx context.Context, in *DeleteUserPreferencesRequest, opts ...grpc.CallOption) (*DeleteUserPreferencesResponse, error) {
+	out := new(DeleteUserPreferencesResponse)
+	err := c.cc.Invoke(ctx, UserService_DeleteUserPreferences_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) CreateNotificationPreferences(ctx context.Context, in *CreateNotificationPreferencesRequest, opts ...grpc.CallOption) (*NotificationPreferences, error) {
+	out := new(NotificationPreferences)
+	err := c.cc.Invoke(ctx, UserService_CreateNotificationPreferences_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) GetNotificationPreferences(ctx context.Context, in *GetNotificationPreferencesRequest, opts ...grpc.CallOption) (*NotificationPreferences, error) {
+	out := new(NotificationPreferences)
+	err := c.cc.Invoke(ctx, UserService_GetNotificationPreferences_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) UpdateNotificationPreferences(ctx context.Context, in *UpdateNotificationPreferencesRequest, opts ...grpc.CallOption) (*NotificationPreferences, error) {
+	out := new(NotificationPreferences)
+	err := c.cc.Invoke(ctx, UserService_UpdateNotificationPreferences_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) DeleteNotificationPreferences(ctx context.Context, in *DeleteNotificationPreferencesRequest, opts ...grpc.CallOption) (*DeleteNotificationPreferencesResponse, error) {
+	out := new(DeleteNotificationPreferencesResponse)
+	err := c.cc.Invoke(ctx, UserService_DeleteNotificationPreferences_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *userServiceClient) LinkBankAccount(ctx context.Context, in *LinkBankAccountRequest, opts ...grpc.CallOption) (*BankAccount, error) {
 	out := new(BankAccount)
 	err := c.cc.Invoke(ctx, UserService_LinkBankAccount_FullMethodName, in, out, opts...)
@@ -105,10 +197,22 @@ func (c *userServiceClient) ListBankAccounts(ctx context.Context, in *ListBankAc
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility
 type UserServiceServer interface {
+	// User operations
 	CreateUser(context.Context, *CreateUserRequest) (*User, error)
 	GetUser(context.Context, *GetUserRequest) (*User, error)
 	UpdateUser(context.Context, *UpdateUserRequest) (*User, error)
 	DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserResponse, error)
+	// User preferences operations
+	CreateUserPreferences(context.Context, *CreateUserPreferencesRequest) (*UserPreferences, error)
+	GetUserPreferences(context.Context, *GetUserPreferencesRequest) (*UserPreferences, error)
+	UpdateUserPreferences(context.Context, *UpdateUserPreferencesRequest) (*UserPreferences, error)
+	DeleteUserPreferences(context.Context, *DeleteUserPreferencesRequest) (*DeleteUserPreferencesResponse, error)
+	// Notification preferences operations
+	CreateNotificationPreferences(context.Context, *CreateNotificationPreferencesRequest) (*NotificationPreferences, error)
+	GetNotificationPreferences(context.Context, *GetNotificationPreferencesRequest) (*NotificationPreferences, error)
+	UpdateNotificationPreferences(context.Context, *UpdateNotificationPreferencesRequest) (*NotificationPreferences, error)
+	DeleteNotificationPreferences(context.Context, *DeleteNotificationPreferencesRequest) (*DeleteNotificationPreferencesResponse, error)
+	// Bank account operations
 	LinkBankAccount(context.Context, *LinkBankAccountRequest) (*BankAccount, error)
 	ListBankAccounts(context.Context, *ListBankAccountsRequest) (*ListBankAccountsResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
@@ -129,6 +233,30 @@ func (UnimplementedUserServiceServer) UpdateUser(context.Context, *UpdateUserReq
 }
 func (UnimplementedUserServiceServer) DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteUser not implemented")
+}
+func (UnimplementedUserServiceServer) CreateUserPreferences(context.Context, *CreateUserPreferencesRequest) (*UserPreferences, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateUserPreferences not implemented")
+}
+func (UnimplementedUserServiceServer) GetUserPreferences(context.Context, *GetUserPreferencesRequest) (*UserPreferences, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserPreferences not implemented")
+}
+func (UnimplementedUserServiceServer) UpdateUserPreferences(context.Context, *UpdateUserPreferencesRequest) (*UserPreferences, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserPreferences not implemented")
+}
+func (UnimplementedUserServiceServer) DeleteUserPreferences(context.Context, *DeleteUserPreferencesRequest) (*DeleteUserPreferencesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteUserPreferences not implemented")
+}
+func (UnimplementedUserServiceServer) CreateNotificationPreferences(context.Context, *CreateNotificationPreferencesRequest) (*NotificationPreferences, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateNotificationPreferences not implemented")
+}
+func (UnimplementedUserServiceServer) GetNotificationPreferences(context.Context, *GetNotificationPreferencesRequest) (*NotificationPreferences, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetNotificationPreferences not implemented")
+}
+func (UnimplementedUserServiceServer) UpdateNotificationPreferences(context.Context, *UpdateNotificationPreferencesRequest) (*NotificationPreferences, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateNotificationPreferences not implemented")
+}
+func (UnimplementedUserServiceServer) DeleteNotificationPreferences(context.Context, *DeleteNotificationPreferencesRequest) (*DeleteNotificationPreferencesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteNotificationPreferences not implemented")
 }
 func (UnimplementedUserServiceServer) LinkBankAccount(context.Context, *LinkBankAccountRequest) (*BankAccount, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LinkBankAccount not implemented")
@@ -221,6 +349,150 @@ func _UserService_DeleteUser_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_CreateUserPreferences_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateUserPreferencesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).CreateUserPreferences(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_CreateUserPreferences_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).CreateUserPreferences(ctx, req.(*CreateUserPreferencesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_GetUserPreferences_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserPreferencesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).GetUserPreferences(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_GetUserPreferences_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).GetUserPreferences(ctx, req.(*GetUserPreferencesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_UpdateUserPreferences_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateUserPreferencesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).UpdateUserPreferences(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_UpdateUserPreferences_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).UpdateUserPreferences(ctx, req.(*UpdateUserPreferencesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_DeleteUserPreferences_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteUserPreferencesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).DeleteUserPreferences(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_DeleteUserPreferences_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).DeleteUserPreferences(ctx, req.(*DeleteUserPreferencesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_CreateNotificationPreferences_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateNotificationPreferencesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).CreateNotificationPreferences(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_CreateNotificationPreferences_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).CreateNotificationPreferences(ctx, req.(*CreateNotificationPreferencesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_GetNotificationPreferences_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetNotificationPreferencesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).GetNotificationPreferences(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_GetNotificationPreferences_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).GetNotificationPreferences(ctx, req.(*GetNotificationPreferencesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_UpdateNotificationPreferences_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateNotificationPreferencesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).UpdateNotificationPreferences(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_UpdateNotificationPreferences_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).UpdateNotificationPreferences(ctx, req.(*UpdateNotificationPreferencesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_DeleteNotificationPreferences_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteNotificationPreferencesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).DeleteNotificationPreferences(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_DeleteNotificationPreferences_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).DeleteNotificationPreferences(ctx, req.(*DeleteNotificationPreferencesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _UserService_LinkBankAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(LinkBankAccountRequest)
 	if err := dec(in); err != nil {
@@ -281,6 +553,38 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _UserService_DeleteUser_Handler,
 		},
 		{
+			MethodName: "CreateUserPreferences",
+			Handler:    _UserService_CreateUserPreferences_Handler,
+		},
+		{
+			MethodName: "GetUserPreferences",
+			Handler:    _UserService_GetUserPreferences_Handler,
+		},
+		{
+			MethodName: "UpdateUserPreferences",
+			Handler:    _UserService_UpdateUserPreferences_Handler,
+		},
+		{
+			MethodName: "DeleteUserPreferences",
+			Handler:    _UserService_DeleteUserPreferences_Handler,
+		},
+		{
+			MethodName: "CreateNotificationPreferences",
+			Handler:    _UserService_CreateNotificationPreferences_Handler,
+		},
+		{
+			MethodName: "GetNotificationPreferences",
+			Handler:    _UserService_GetNotificationPreferences_Handler,
+		},
+		{
+			MethodName: "UpdateNotificationPreferences",
+			Handler:    _UserService_UpdateNotificationPreferences_Handler,
+		},
+		{
+			MethodName: "DeleteNotificationPreferences",
+			Handler:    _UserService_DeleteNotificationPreferences_Handler,
+		},
+		{
 			MethodName: "LinkBankAccount",
 			Handler:    _UserService_LinkBankAccount_Handler,
 		},
@@ -290,5 +594,5 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "services/user/proto/user.proto",
+	Metadata: "user.proto",
 }

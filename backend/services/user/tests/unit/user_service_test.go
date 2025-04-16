@@ -1065,3 +1065,186 @@ func TestListBankAccounts(t *testing.T) {
 		mockPlaidClient.AssertExpectations(t)
 	})
 }
+
+func TestCreateUserPreferences(t *testing.T) {
+	mockDB := new(MockDB)
+	mockPlaidClient := new(MockPlaidClient)
+	service := internal.NewUserService(mockDB, mockPlaidClient)
+
+	t.Run("success", func(t *testing.T) {
+		userID := uuid.New().String()
+		req := &pb.CreateUserPreferencesRequest{
+			UserId:   userID,
+			Currency: "USD",
+			Timezone: "UTC",
+			Language: "en",
+			DarkMode: true,
+			Budget:   1000.00,
+		}
+
+		// Create a mock row that will return true for the user EXISTS query
+		mockRow := &MockRow{
+			values: []interface{}{true},
+		}
+		mockDB.On("QueryRowContext", mock.Anything, "SELECT EXISTS(SELECT 1 FROM users WHERE id = $1)", []interface{}{req.UserId}).
+			Return(mockRow).Once()
+
+		// Create a mock row that will return false for the preferences EXISTS query
+		mockRow = &MockRow{
+			values: []interface{}{false},
+		}
+		mockDB.On("QueryRowContext", mock.Anything, "SELECT EXISTS(SELECT 1 FROM user_preferences WHERE user_id = $1)", []interface{}{req.UserId}).
+			Return(mockRow).Once()
+
+		mockResult := new(MockSQLResult)
+		mockResult.On("LastInsertId").Return(int64(1), nil)
+		mockResult.On("RowsAffected").Return(int64(1), nil)
+
+		mockDB.On("ExecContext", mock.Anything, mock.Anything, mock.AnythingOfType("[]interface {}")).
+			Return(mockResult, nil).Once()
+
+		resp, err := service.CreateUserPreferences(context.Background(), req)
+		assert.NoError(t, err)
+		assert.NotNil(t, resp)
+		assert.Equal(t, req.Currency, resp.Currency)
+		assert.Equal(t, req.Timezone, resp.Timezone)
+		assert.Equal(t, req.Language, resp.Language)
+		assert.Equal(t, req.DarkMode, resp.DarkMode)
+		assert.Equal(t, req.Budget, resp.Budget)
+		mockDB.AssertExpectations(t)
+	})
+
+	t.Run("user does not exist", func(t *testing.T) {
+		userID := uuid.New().String()
+		req := &pb.CreateUserPreferencesRequest{
+			UserId:   userID,
+			Currency: "USD",
+			Timezone: "UTC",
+			Language: "en",
+			DarkMode: true,
+			Budget:   1000.00,
+		}
+
+		// Create a mock row that will return false for the user EXISTS query
+		mockRow := &MockRow{
+			values: []interface{}{false},
+		}
+		mockDB.On("QueryRowContext", mock.Anything, "SELECT EXISTS(SELECT 1 FROM users WHERE id = $1)", []interface{}{req.UserId}).
+			Return(mockRow).Once()
+
+		resp, err := service.CreateUserPreferences(context.Background(), req)
+		assert.Error(t, err)
+		assert.Nil(t, resp)
+		assert.Contains(t, err.Error(), "User not found")
+		mockDB.AssertExpectations(t)
+	})
+
+	t.Run("preferences already exist", func(t *testing.T) {
+		userID := uuid.New().String()
+		req := &pb.CreateUserPreferencesRequest{
+			UserId:   userID,
+			Currency: "USD",
+			Timezone: "UTC",
+			Language: "en",
+			DarkMode: true,
+			Budget:   1000.00,
+		}
+
+		// Create a mock row that will return true for the user EXISTS query
+		mockRow := &MockRow{
+			values: []interface{}{true},
+		}
+		mockDB.On("QueryRowContext", mock.Anything, "SELECT EXISTS(SELECT 1 FROM users WHERE id = $1)", []interface{}{req.UserId}).
+			Return(mockRow).Once()
+
+		// Create a mock row that will return true for the preferences EXISTS query
+		mockRow = &MockRow{
+			values: []interface{}{true},
+		}
+		mockDB.On("QueryRowContext", mock.Anything, "SELECT EXISTS(SELECT 1 FROM user_preferences WHERE user_id = $1)", []interface{}{req.UserId}).
+			Return(mockRow).Once()
+
+		resp, err := service.CreateUserPreferences(context.Background(), req)
+		assert.Error(t, err)
+		assert.Nil(t, resp)
+		assert.Contains(t, err.Error(), "User preferences already exist")
+		mockDB.AssertExpectations(t)
+	})
+
+	t.Run("invalid budget", func(t *testing.T) {
+		userID := uuid.New().String()
+		req := &pb.CreateUserPreferencesRequest{
+			UserId:   userID,
+			Currency: "USD",
+			Timezone: "UTC",
+			Language: "en",
+			DarkMode: true,
+			Budget:   -1000.00, // Invalid negative budget
+		}
+
+		resp, err := service.CreateUserPreferences(context.Background(), req)
+		assert.Error(t, err)
+		assert.Nil(t, resp)
+		assert.Contains(t, err.Error(), "Budget must be greater than 0")
+	})
+
+	t.Run("missing required fields", func(t *testing.T) {
+		req := &pb.CreateUserPreferencesRequest{}
+
+		resp, err := service.CreateUserPreferences(context.Background(), req)
+		assert.Error(t, err)
+		assert.Nil(t, resp)
+		assert.Contains(t, err.Error(), "user_id is required")
+	})
+
+	t.Run("invalid currency", func(t *testing.T) {
+		userID := uuid.New().String()
+		req := &pb.CreateUserPreferencesRequest{
+			UserId:   userID,
+			Currency: "EUR", // Only USD is currently supported
+			Timezone: "UTC",
+			Language: "en",
+			DarkMode: true,
+			Budget:   1000.00,
+		}
+
+		resp, err := service.CreateUserPreferences(context.Background(), req)
+		assert.Error(t, err)
+		assert.Nil(t, resp)
+		assert.Contains(t, err.Error(), "Invalid currency")
+	})
+
+	t.Run("invalid timezone", func(t *testing.T) {
+		userID := uuid.New().String()
+		req := &pb.CreateUserPreferencesRequest{
+			UserId:   userID,
+			Currency: "USD",
+			Timezone: "GMT", // Only UTC is currently supported
+			Language: "en",
+			DarkMode: true,
+			Budget:   1000.00,
+		}
+
+		resp, err := service.CreateUserPreferences(context.Background(), req)
+		assert.Error(t, err)
+		assert.Nil(t, resp)
+		assert.Contains(t, err.Error(), "Invalid timezone")
+	})
+
+	t.Run("invalid language", func(t *testing.T) {
+		userID := uuid.New().String()
+		req := &pb.CreateUserPreferencesRequest{
+			UserId:   userID,
+			Currency: "USD",
+			Timezone: "UTC",
+			Language: "es", // Only en is currently supported
+			DarkMode: true,
+			Budget:   1000.00,
+		}
+
+		resp, err := service.CreateUserPreferences(context.Background(), req)
+		assert.Error(t, err)
+		assert.Nil(t, resp)
+		assert.Contains(t, err.Error(), "Invalid language")
+	})
+}
