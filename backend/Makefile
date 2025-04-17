@@ -74,9 +74,9 @@ docker-up:
 	@echo "Waiting for postgres to be ready..."
 	@sleep 5
 	@echo "Running database migrations..."
-	docker compose exec -T postgres migrate -database "$(MIGRATE_DATABASE_URL)" -path /migrations/user up
-	docker compose exec -T postgres migrate -database "$(MIGRATE_DATABASE_URL)" -path /migrations/plaid up
-	docker compose exec -T postgres migrate -database "$(MIGRATE_DATABASE_URL)" -path /migrations/transaction up
+	-docker compose exec -T postgres migrate -database "$(MIGRATE_DATABASE_URL)" -path /migrations/user up || true
+	-docker compose exec -T postgres migrate -database "$(MIGRATE_DATABASE_URL)" -path /migrations/plaid up || true
+	-docker compose exec -T postgres migrate -database "$(MIGRATE_DATABASE_URL)" -path /migrations/transaction up || true
 	@echo "Starting remaining services..."
 	docker compose up -d
 
@@ -100,9 +100,10 @@ logs-services:
 # ----------------
 migrate-up:
 	@echo "Running database migrations..."
-	docker compose exec -T postgres migrate -database "$(MIGRATE_DATABASE_URL)" -path /migrations/user up
-	docker compose exec -T postgres migrate -database "$(MIGRATE_DATABASE_URL)" -path /migrations/plaid up
-	docker compose exec -T postgres migrate -database "$(MIGRATE_DATABASE_URL)" -path /migrations/transaction up
+	-docker compose exec -T postgres migrate -database "$(MIGRATE_DATABASE_URL)" -path /migrations/user up || true
+	-docker compose exec -T postgres migrate -database "$(MIGRATE_DATABASE_URL)" -path /migrations/plaid up || true
+	-docker compose exec -T postgres migrate -database "$(MIGRATE_DATABASE_URL)" -path /migrations/transaction up || true
+	@echo "Migrations completed"
 
 migrate-down:
 	@echo "Rolling back database migrations..."

@@ -14,6 +14,12 @@ service UserService {
   rpc UpdateUser(UpdateUserRequest) returns (User);
   rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse);
 
+  // Authentication operations
+  rpc SignUp(SignUpRequest) returns (AuthResponse);
+  rpc SignIn(SignInRequest) returns (AuthResponse);
+  rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse);
+  rpc ChangePassword(ChangePasswordRequest) returns (ChangePasswordResponse);
+
   // User preferences operations
   rpc CreateUserPreferences(CreateUserPreferencesRequest) returns (UserPreferences);
   rpc GetUserPreferences(GetUserPreferencesRequest) returns (UserPreferences);
@@ -29,6 +35,45 @@ service UserService {
   // Bank account operations
   rpc LinkBankAccount(LinkBankAccountRequest) returns (BankAccount);
   rpc ListBankAccounts(ListBankAccountsRequest) returns (ListBankAccountsResponse);
+}
+
+// Authentication messages
+message SignUpRequest {
+  string email = 1;
+  string password = 2;
+  string first_name = 3;
+  string last_name = 4;
+}
+
+message SignInRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message AuthResponse {
+  string user_id = 1;
+  string token = 2;
+  User user = 3;
+}
+
+message ResetPasswordRequest {
+  string email = 1;
+}
+
+message ResetPasswordResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ChangePasswordRequest {
+  string user_id = 1;
+  string old_password = 2;
+  string new_password = 3;
+}
+
+message ChangePasswordResponse {
+  bool success = 1;
+  string message = 2;
 }
 
 // Core user messages

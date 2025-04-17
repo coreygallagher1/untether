@@ -22,6 +22,395 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// Authentication messages
+type SignUpRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Email         string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
+	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	FirstName     string                 `protobuf:"bytes,3,opt,name=first_name,json=firstName,proto3" json:"first_name,omitempty"`
+	LastName      string                 `protobuf:"bytes,4,opt,name=last_name,json=lastName,proto3" json:"last_name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SignUpRequest) Reset() {
+	*x = SignUpRequest{}
+	mi := &file_user_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SignUpRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SignUpRequest) ProtoMessage() {}
+
+func (x *SignUpRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SignUpRequest.ProtoReflect.Descriptor instead.
+func (*SignUpRequest) Descriptor() ([]byte, []int) {
+	return file_user_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *SignUpRequest) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+func (x *SignUpRequest) GetPassword() string {
+	if x != nil {
+		return x.Password
+	}
+	return ""
+}
+
+func (x *SignUpRequest) GetFirstName() string {
+	if x != nil {
+		return x.FirstName
+	}
+	return ""
+}
+
+func (x *SignUpRequest) GetLastName() string {
+	if x != nil {
+		return x.LastName
+	}
+	return ""
+}
+
+type SignInRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Email         string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
+	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SignInRequest) Reset() {
+	*x = SignInRequest{}
+	mi := &file_user_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SignInRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SignInRequest) ProtoMessage() {}
+
+func (x *SignInRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SignInRequest.ProtoReflect.Descriptor instead.
+func (*SignInRequest) Descriptor() ([]byte, []int) {
+	return file_user_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *SignInRequest) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+func (x *SignInRequest) GetPassword() string {
+	if x != nil {
+		return x.Password
+	}
+	return ""
+}
+
+type AuthResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Token         string                 `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
+	User          *User                  `protobuf:"bytes,3,opt,name=user,proto3" json:"user,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AuthResponse) Reset() {
+	*x = AuthResponse{}
+	mi := &file_user_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AuthResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AuthResponse) ProtoMessage() {}
+
+func (x *AuthResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_user_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AuthResponse.ProtoReflect.Descriptor instead.
+func (*AuthResponse) Descriptor() ([]byte, []int) {
+	return file_user_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *AuthResponse) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *AuthResponse) GetToken() string {
+	if x != nil {
+		return x.Token
+	}
+	return ""
+}
+
+func (x *AuthResponse) GetUser() *User {
+	if x != nil {
+		return x.User
+	}
+	return nil
+}
+
+type ResetPasswordRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Email         string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ResetPasswordRequest) Reset() {
+	*x = ResetPasswordRequest{}
+	mi := &file_user_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ResetPasswordRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ResetPasswordRequest) ProtoMessage() {}
+
+func (x *ResetPasswordRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ResetPasswordRequest.ProtoReflect.Descriptor instead.
+func (*ResetPasswordRequest) Descriptor() ([]byte, []int) {
+	return file_user_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *ResetPasswordRequest) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+type ResetPasswordResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ResetPasswordResponse) Reset() {
+	*x = ResetPasswordResponse{}
+	mi := &file_user_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ResetPasswordResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ResetPasswordResponse) ProtoMessage() {}
+
+func (x *ResetPasswordResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_user_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ResetPasswordResponse.ProtoReflect.Descriptor instead.
+func (*ResetPasswordResponse) Descriptor() ([]byte, []int) {
+	return file_user_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *ResetPasswordResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ResetPasswordResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+type ChangePasswordRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	OldPassword   string                 `protobuf:"bytes,2,opt,name=old_password,json=oldPassword,proto3" json:"old_password,omitempty"`
+	NewPassword   string                 `protobuf:"bytes,3,opt,name=new_password,json=newPassword,proto3" json:"new_password,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ChangePasswordRequest) Reset() {
+	*x = ChangePasswordRequest{}
+	mi := &file_user_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChangePasswordRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChangePasswordRequest) ProtoMessage() {}
+
+func (x *ChangePasswordRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChangePasswordRequest.ProtoReflect.Descriptor instead.
+func (*ChangePasswordRequest) Descriptor() ([]byte, []int) {
+	return file_user_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *ChangePasswordRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *ChangePasswordRequest) GetOldPassword() string {
+	if x != nil {
+		return x.OldPassword
+	}
+	return ""
+}
+
+func (x *ChangePasswordRequest) GetNewPassword() string {
+	if x != nil {
+		return x.NewPassword
+	}
+	return ""
+}
+
+type ChangePasswordResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ChangePasswordResponse) Reset() {
+	*x = ChangePasswordResponse{}
+	mi := &file_user_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChangePasswordResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChangePasswordResponse) ProtoMessage() {}
+
+func (x *ChangePasswordResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_user_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChangePasswordResponse.ProtoReflect.Descriptor instead.
+func (*ChangePasswordResponse) Descriptor() ([]byte, []int) {
+	return file_user_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *ChangePasswordResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ChangePasswordResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
 // Core user messages
 type User struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -38,7 +427,7 @@ type User struct {
 
 func (x *User) Reset() {
 	*x = User{}
-	mi := &file_user_proto_msgTypes[0]
+	mi := &file_user_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -50,7 +439,7 @@ func (x *User) String() string {
 func (*User) ProtoMessage() {}
 
 func (x *User) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[0]
+	mi := &file_user_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -63,7 +452,7 @@ func (x *User) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use User.ProtoReflect.Descriptor instead.
 func (*User) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{0}
+	return file_user_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *User) GetId() string {
@@ -127,7 +516,7 @@ type CreateUserRequest struct {
 
 func (x *CreateUserRequest) Reset() {
 	*x = CreateUserRequest{}
-	mi := &file_user_proto_msgTypes[1]
+	mi := &file_user_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -139,7 +528,7 @@ func (x *CreateUserRequest) String() string {
 func (*CreateUserRequest) ProtoMessage() {}
 
 func (x *CreateUserRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[1]
+	mi := &file_user_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -152,7 +541,7 @@ func (x *CreateUserRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateUserRequest.ProtoReflect.Descriptor instead.
 func (*CreateUserRequest) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{1}
+	return file_user_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *CreateUserRequest) GetEmail() string {
@@ -185,7 +574,7 @@ type GetUserRequest struct {
 
 func (x *GetUserRequest) Reset() {
 	*x = GetUserRequest{}
-	mi := &file_user_proto_msgTypes[2]
+	mi := &file_user_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -197,7 +586,7 @@ func (x *GetUserRequest) String() string {
 func (*GetUserRequest) ProtoMessage() {}
 
 func (x *GetUserRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[2]
+	mi := &file_user_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -210,7 +599,7 @@ func (x *GetUserRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserRequest.ProtoReflect.Descriptor instead.
 func (*GetUserRequest) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{2}
+	return file_user_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *GetUserRequest) GetId() string {
@@ -232,7 +621,7 @@ type UpdateUserRequest struct {
 
 func (x *UpdateUserRequest) Reset() {
 	*x = UpdateUserRequest{}
-	mi := &file_user_proto_msgTypes[3]
+	mi := &file_user_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -244,7 +633,7 @@ func (x *UpdateUserRequest) String() string {
 func (*UpdateUserRequest) ProtoMessage() {}
 
 func (x *UpdateUserRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[3]
+	mi := &file_user_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -257,7 +646,7 @@ func (x *UpdateUserRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateUserRequest.ProtoReflect.Descriptor instead.
 func (*UpdateUserRequest) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{3}
+	return file_user_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *UpdateUserRequest) GetId() string {
@@ -297,7 +686,7 @@ type DeleteUserRequest struct {
 
 func (x *DeleteUserRequest) Reset() {
 	*x = DeleteUserRequest{}
-	mi := &file_user_proto_msgTypes[4]
+	mi := &file_user_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -309,7 +698,7 @@ func (x *DeleteUserRequest) String() string {
 func (*DeleteUserRequest) ProtoMessage() {}
 
 func (x *DeleteUserRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[4]
+	mi := &file_user_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -322,7 +711,7 @@ func (x *DeleteUserRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteUserRequest.ProtoReflect.Descriptor instead.
 func (*DeleteUserRequest) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{4}
+	return file_user_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *DeleteUserRequest) GetId() string {
@@ -341,7 +730,7 @@ type DeleteUserResponse struct {
 
 func (x *DeleteUserResponse) Reset() {
 	*x = DeleteUserResponse{}
-	mi := &file_user_proto_msgTypes[5]
+	mi := &file_user_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -353,7 +742,7 @@ func (x *DeleteUserResponse) String() string {
 func (*DeleteUserResponse) ProtoMessage() {}
 
 func (x *DeleteUserResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[5]
+	mi := &file_user_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -366,7 +755,7 @@ func (x *DeleteUserResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteUserResponse.ProtoReflect.Descriptor instead.
 func (*DeleteUserResponse) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{5}
+	return file_user_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *DeleteUserResponse) GetSuccess() bool {
@@ -390,7 +779,7 @@ type UserPreferences struct {
 
 func (x *UserPreferences) Reset() {
 	*x = UserPreferences{}
-	mi := &file_user_proto_msgTypes[6]
+	mi := &file_user_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -402,7 +791,7 @@ func (x *UserPreferences) String() string {
 func (*UserPreferences) ProtoMessage() {}
 
 func (x *UserPreferences) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[6]
+	mi := &file_user_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -415,7 +804,7 @@ func (x *UserPreferences) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserPreferences.ProtoReflect.Descriptor instead.
 func (*UserPreferences) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{6}
+	return file_user_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *UserPreferences) GetCurrency() string {
@@ -467,7 +856,7 @@ type CreateUserPreferencesRequest struct {
 
 func (x *CreateUserPreferencesRequest) Reset() {
 	*x = CreateUserPreferencesRequest{}
-	mi := &file_user_proto_msgTypes[7]
+	mi := &file_user_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -479,7 +868,7 @@ func (x *CreateUserPreferencesRequest) String() string {
 func (*CreateUserPreferencesRequest) ProtoMessage() {}
 
 func (x *CreateUserPreferencesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[7]
+	mi := &file_user_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -492,7 +881,7 @@ func (x *CreateUserPreferencesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateUserPreferencesRequest.ProtoReflect.Descriptor instead.
 func (*CreateUserPreferencesRequest) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{7}
+	return file_user_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *CreateUserPreferencesRequest) GetUserId() string {
@@ -546,7 +935,7 @@ type GetUserPreferencesRequest struct {
 
 func (x *GetUserPreferencesRequest) Reset() {
 	*x = GetUserPreferencesRequest{}
-	mi := &file_user_proto_msgTypes[8]
+	mi := &file_user_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -558,7 +947,7 @@ func (x *GetUserPreferencesRequest) String() string {
 func (*GetUserPreferencesRequest) ProtoMessage() {}
 
 func (x *GetUserPreferencesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[8]
+	mi := &file_user_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -571,7 +960,7 @@ func (x *GetUserPreferencesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserPreferencesRequest.ProtoReflect.Descriptor instead.
 func (*GetUserPreferencesRequest) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{8}
+	return file_user_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *GetUserPreferencesRequest) GetUserId() string {
@@ -595,7 +984,7 @@ type UpdateUserPreferencesRequest struct {
 
 func (x *UpdateUserPreferencesRequest) Reset() {
 	*x = UpdateUserPreferencesRequest{}
-	mi := &file_user_proto_msgTypes[9]
+	mi := &file_user_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -607,7 +996,7 @@ func (x *UpdateUserPreferencesRequest) String() string {
 func (*UpdateUserPreferencesRequest) ProtoMessage() {}
 
 func (x *UpdateUserPreferencesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[9]
+	mi := &file_user_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -620,7 +1009,7 @@ func (x *UpdateUserPreferencesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateUserPreferencesRequest.ProtoReflect.Descriptor instead.
 func (*UpdateUserPreferencesRequest) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{9}
+	return file_user_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *UpdateUserPreferencesRequest) GetUserId() string {
@@ -674,7 +1063,7 @@ type DeleteUserPreferencesRequest struct {
 
 func (x *DeleteUserPreferencesRequest) Reset() {
 	*x = DeleteUserPreferencesRequest{}
-	mi := &file_user_proto_msgTypes[10]
+	mi := &file_user_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -686,7 +1075,7 @@ func (x *DeleteUserPreferencesRequest) String() string {
 func (*DeleteUserPreferencesRequest) ProtoMessage() {}
 
 func (x *DeleteUserPreferencesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[10]
+	mi := &file_user_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -699,7 +1088,7 @@ func (x *DeleteUserPreferencesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteUserPreferencesRequest.ProtoReflect.Descriptor instead.
 func (*DeleteUserPreferencesRequest) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{10}
+	return file_user_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *DeleteUserPreferencesRequest) GetUserId() string {
@@ -718,7 +1107,7 @@ type DeleteUserPreferencesResponse struct {
 
 func (x *DeleteUserPreferencesResponse) Reset() {
 	*x = DeleteUserPreferencesResponse{}
-	mi := &file_user_proto_msgTypes[11]
+	mi := &file_user_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -730,7 +1119,7 @@ func (x *DeleteUserPreferencesResponse) String() string {
 func (*DeleteUserPreferencesResponse) ProtoMessage() {}
 
 func (x *DeleteUserPreferencesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[11]
+	mi := &file_user_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -743,7 +1132,7 @@ func (x *DeleteUserPreferencesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteUserPreferencesResponse.ProtoReflect.Descriptor instead.
 func (*DeleteUserPreferencesResponse) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{11}
+	return file_user_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *DeleteUserPreferencesResponse) GetSuccess() bool {
@@ -767,7 +1156,7 @@ type NotificationPreferences struct {
 
 func (x *NotificationPreferences) Reset() {
 	*x = NotificationPreferences{}
-	mi := &file_user_proto_msgTypes[12]
+	mi := &file_user_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -779,7 +1168,7 @@ func (x *NotificationPreferences) String() string {
 func (*NotificationPreferences) ProtoMessage() {}
 
 func (x *NotificationPreferences) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[12]
+	mi := &file_user_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -792,7 +1181,7 @@ func (x *NotificationPreferences) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use NotificationPreferences.ProtoReflect.Descriptor instead.
 func (*NotificationPreferences) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{12}
+	return file_user_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *NotificationPreferences) GetNotificationsEnabled() bool {
@@ -844,7 +1233,7 @@ type CreateNotificationPreferencesRequest struct {
 
 func (x *CreateNotificationPreferencesRequest) Reset() {
 	*x = CreateNotificationPreferencesRequest{}
-	mi := &file_user_proto_msgTypes[13]
+	mi := &file_user_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -856,7 +1245,7 @@ func (x *CreateNotificationPreferencesRequest) String() string {
 func (*CreateNotificationPreferencesRequest) ProtoMessage() {}
 
 func (x *CreateNotificationPreferencesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[13]
+	mi := &file_user_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -869,7 +1258,7 @@ func (x *CreateNotificationPreferencesRequest) ProtoReflect() protoreflect.Messa
 
 // Deprecated: Use CreateNotificationPreferencesRequest.ProtoReflect.Descriptor instead.
 func (*CreateNotificationPreferencesRequest) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{13}
+	return file_user_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *CreateNotificationPreferencesRequest) GetUserId() string {
@@ -923,7 +1312,7 @@ type GetNotificationPreferencesRequest struct {
 
 func (x *GetNotificationPreferencesRequest) Reset() {
 	*x = GetNotificationPreferencesRequest{}
-	mi := &file_user_proto_msgTypes[14]
+	mi := &file_user_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -935,7 +1324,7 @@ func (x *GetNotificationPreferencesRequest) String() string {
 func (*GetNotificationPreferencesRequest) ProtoMessage() {}
 
 func (x *GetNotificationPreferencesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[14]
+	mi := &file_user_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -948,7 +1337,7 @@ func (x *GetNotificationPreferencesRequest) ProtoReflect() protoreflect.Message 
 
 // Deprecated: Use GetNotificationPreferencesRequest.ProtoReflect.Descriptor instead.
 func (*GetNotificationPreferencesRequest) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{14}
+	return file_user_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *GetNotificationPreferencesRequest) GetUserId() string {
@@ -972,7 +1361,7 @@ type UpdateNotificationPreferencesRequest struct {
 
 func (x *UpdateNotificationPreferencesRequest) Reset() {
 	*x = UpdateNotificationPreferencesRequest{}
-	mi := &file_user_proto_msgTypes[15]
+	mi := &file_user_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -984,7 +1373,7 @@ func (x *UpdateNotificationPreferencesRequest) String() string {
 func (*UpdateNotificationPreferencesRequest) ProtoMessage() {}
 
 func (x *UpdateNotificationPreferencesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[15]
+	mi := &file_user_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -997,7 +1386,7 @@ func (x *UpdateNotificationPreferencesRequest) ProtoReflect() protoreflect.Messa
 
 // Deprecated: Use UpdateNotificationPreferencesRequest.ProtoReflect.Descriptor instead.
 func (*UpdateNotificationPreferencesRequest) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{15}
+	return file_user_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *UpdateNotificationPreferencesRequest) GetUserId() string {
@@ -1051,7 +1440,7 @@ type DeleteNotificationPreferencesRequest struct {
 
 func (x *DeleteNotificationPreferencesRequest) Reset() {
 	*x = DeleteNotificationPreferencesRequest{}
-	mi := &file_user_proto_msgTypes[16]
+	mi := &file_user_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1063,7 +1452,7 @@ func (x *DeleteNotificationPreferencesRequest) String() string {
 func (*DeleteNotificationPreferencesRequest) ProtoMessage() {}
 
 func (x *DeleteNotificationPreferencesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[16]
+	mi := &file_user_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1076,7 +1465,7 @@ func (x *DeleteNotificationPreferencesRequest) ProtoReflect() protoreflect.Messa
 
 // Deprecated: Use DeleteNotificationPreferencesRequest.ProtoReflect.Descriptor instead.
 func (*DeleteNotificationPreferencesRequest) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{16}
+	return file_user_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *DeleteNotificationPreferencesRequest) GetUserId() string {
@@ -1095,7 +1484,7 @@ type DeleteNotificationPreferencesResponse struct {
 
 func (x *DeleteNotificationPreferencesResponse) Reset() {
 	*x = DeleteNotificationPreferencesResponse{}
-	mi := &file_user_proto_msgTypes[17]
+	mi := &file_user_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1107,7 +1496,7 @@ func (x *DeleteNotificationPreferencesResponse) String() string {
 func (*DeleteNotificationPreferencesResponse) ProtoMessage() {}
 
 func (x *DeleteNotificationPreferencesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[17]
+	mi := &file_user_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1120,7 +1509,7 @@ func (x *DeleteNotificationPreferencesResponse) ProtoReflect() protoreflect.Mess
 
 // Deprecated: Use DeleteNotificationPreferencesResponse.ProtoReflect.Descriptor instead.
 func (*DeleteNotificationPreferencesResponse) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{17}
+	return file_user_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *DeleteNotificationPreferencesResponse) GetSuccess() bool {
@@ -1149,7 +1538,7 @@ type BankAccount struct {
 
 func (x *BankAccount) Reset() {
 	*x = BankAccount{}
-	mi := &file_user_proto_msgTypes[18]
+	mi := &file_user_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1161,7 +1550,7 @@ func (x *BankAccount) String() string {
 func (*BankAccount) ProtoMessage() {}
 
 func (x *BankAccount) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[18]
+	mi := &file_user_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1174,7 +1563,7 @@ func (x *BankAccount) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BankAccount.ProtoReflect.Descriptor instead.
 func (*BankAccount) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{18}
+	return file_user_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *BankAccount) GetId() string {
@@ -1258,7 +1647,7 @@ type LinkBankAccountRequest struct {
 
 func (x *LinkBankAccountRequest) Reset() {
 	*x = LinkBankAccountRequest{}
-	mi := &file_user_proto_msgTypes[19]
+	mi := &file_user_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1270,7 +1659,7 @@ func (x *LinkBankAccountRequest) String() string {
 func (*LinkBankAccountRequest) ProtoMessage() {}
 
 func (x *LinkBankAccountRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[19]
+	mi := &file_user_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1283,7 +1672,7 @@ func (x *LinkBankAccountRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LinkBankAccountRequest.ProtoReflect.Descriptor instead.
 func (*LinkBankAccountRequest) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{19}
+	return file_user_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *LinkBankAccountRequest) GetUserId() string {
@@ -1316,7 +1705,7 @@ type ListBankAccountsRequest struct {
 
 func (x *ListBankAccountsRequest) Reset() {
 	*x = ListBankAccountsRequest{}
-	mi := &file_user_proto_msgTypes[20]
+	mi := &file_user_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1328,7 +1717,7 @@ func (x *ListBankAccountsRequest) String() string {
 func (*ListBankAccountsRequest) ProtoMessage() {}
 
 func (x *ListBankAccountsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[20]
+	mi := &file_user_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1341,7 +1730,7 @@ func (x *ListBankAccountsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListBankAccountsRequest.ProtoReflect.Descriptor instead.
 func (*ListBankAccountsRequest) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{20}
+	return file_user_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *ListBankAccountsRequest) GetUserId() string {
@@ -1360,7 +1749,7 @@ type ListBankAccountsResponse struct {
 
 func (x *ListBankAccountsResponse) Reset() {
 	*x = ListBankAccountsResponse{}
-	mi := &file_user_proto_msgTypes[21]
+	mi := &file_user_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1372,7 +1761,7 @@ func (x *ListBankAccountsResponse) String() string {
 func (*ListBankAccountsResponse) ProtoMessage() {}
 
 func (x *ListBankAccountsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[21]
+	mi := &file_user_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1385,7 +1774,7 @@ func (x *ListBankAccountsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListBankAccountsResponse.ProtoReflect.Descriptor instead.
 func (*ListBankAccountsResponse) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{21}
+	return file_user_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *ListBankAccountsResponse) GetAccounts() []*BankAccount {
@@ -1400,7 +1789,33 @@ var File_user_proto protoreflect.FileDescriptor
 const file_user_proto_rawDesc = "" +
 	"\n" +
 	"\n" +
-	"user.proto\x12\x04user\x1a\x1fgoogle/protobuf/timestamp.proto\"\x96\x02\n" +
+	"user.proto\x12\x04user\x1a\x1fgoogle/protobuf/timestamp.proto\"}\n" +
+	"\rSignUpRequest\x12\x14\n" +
+	"\x05email\x18\x01 \x01(\tR\x05email\x12\x1a\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\x12\x1d\n" +
+	"\n" +
+	"first_name\x18\x03 \x01(\tR\tfirstName\x12\x1b\n" +
+	"\tlast_name\x18\x04 \x01(\tR\blastName\"A\n" +
+	"\rSignInRequest\x12\x14\n" +
+	"\x05email\x18\x01 \x01(\tR\x05email\x12\x1a\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\"]\n" +
+	"\fAuthResponse\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x14\n" +
+	"\x05token\x18\x02 \x01(\tR\x05token\x12\x1e\n" +
+	"\x04user\x18\x03 \x01(\v2\n" +
+	".user.UserR\x04user\",\n" +
+	"\x14ResetPasswordRequest\x12\x14\n" +
+	"\x05email\x18\x01 \x01(\tR\x05email\"K\n" +
+	"\x15ResetPasswordResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"v\n" +
+	"\x15ChangePasswordRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12!\n" +
+	"\fold_password\x18\x02 \x01(\tR\voldPassword\x12!\n" +
+	"\fnew_password\x18\x03 \x01(\tR\vnewPassword\"L\n" +
+	"\x16ChangePasswordResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"\x96\x02\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
 	"\x05email\x18\x02 \x01(\tR\x05email\x12\x1d\n" +
@@ -1502,7 +1917,7 @@ const file_user_proto_rawDesc = "" +
 	"\x17ListBankAccountsRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\"I\n" +
 	"\x18ListBankAccountsResponse\x12-\n" +
-	"\baccounts\x18\x01 \x03(\v2\x11.user.BankAccountR\baccounts2\x88\t\n" +
+	"\baccounts\x18\x01 \x03(\v2\x11.user.BankAccountR\baccounts2\x85\v\n" +
 	"\vUserService\x121\n" +
 	"\n" +
 	"CreateUser\x12\x17.user.CreateUserRequest\x1a\n" +
@@ -1513,7 +1928,11 @@ const file_user_proto_rawDesc = "" +
 	"UpdateUser\x12\x17.user.UpdateUserRequest\x1a\n" +
 	".user.User\x12?\n" +
 	"\n" +
-	"DeleteUser\x12\x17.user.DeleteUserRequest\x1a\x18.user.DeleteUserResponse\x12R\n" +
+	"DeleteUser\x12\x17.user.DeleteUserRequest\x1a\x18.user.DeleteUserResponse\x121\n" +
+	"\x06SignUp\x12\x13.user.SignUpRequest\x1a\x12.user.AuthResponse\x121\n" +
+	"\x06SignIn\x12\x13.user.SignInRequest\x1a\x12.user.AuthResponse\x12H\n" +
+	"\rResetPassword\x12\x1a.user.ResetPasswordRequest\x1a\x1b.user.ResetPasswordResponse\x12K\n" +
+	"\x0eChangePassword\x12\x1b.user.ChangePasswordRequest\x1a\x1c.user.ChangePasswordResponse\x12R\n" +
 	"\x15CreateUserPreferences\x12\".user.CreateUserPreferencesRequest\x1a\x15.user.UserPreferences\x12L\n" +
 	"\x12GetUserPreferences\x12\x1f.user.GetUserPreferencesRequest\x1a\x15.user.UserPreferences\x12R\n" +
 	"\x15UpdateUserPreferences\x12\".user.UpdateUserPreferencesRequest\x1a\x15.user.UserPreferences\x12`\n" +
@@ -1537,72 +1956,88 @@ func file_user_proto_rawDescGZIP() []byte {
 	return file_user_proto_rawDescData
 }
 
-var file_user_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
+var file_user_proto_msgTypes = make([]protoimpl.MessageInfo, 29)
 var file_user_proto_goTypes = []any{
-	(*User)(nil),                                  // 0: user.User
-	(*CreateUserRequest)(nil),                     // 1: user.CreateUserRequest
-	(*GetUserRequest)(nil),                        // 2: user.GetUserRequest
-	(*UpdateUserRequest)(nil),                     // 3: user.UpdateUserRequest
-	(*DeleteUserRequest)(nil),                     // 4: user.DeleteUserRequest
-	(*DeleteUserResponse)(nil),                    // 5: user.DeleteUserResponse
-	(*UserPreferences)(nil),                       // 6: user.UserPreferences
-	(*CreateUserPreferencesRequest)(nil),          // 7: user.CreateUserPreferencesRequest
-	(*GetUserPreferencesRequest)(nil),             // 8: user.GetUserPreferencesRequest
-	(*UpdateUserPreferencesRequest)(nil),          // 9: user.UpdateUserPreferencesRequest
-	(*DeleteUserPreferencesRequest)(nil),          // 10: user.DeleteUserPreferencesRequest
-	(*DeleteUserPreferencesResponse)(nil),         // 11: user.DeleteUserPreferencesResponse
-	(*NotificationPreferences)(nil),               // 12: user.NotificationPreferences
-	(*CreateNotificationPreferencesRequest)(nil),  // 13: user.CreateNotificationPreferencesRequest
-	(*GetNotificationPreferencesRequest)(nil),     // 14: user.GetNotificationPreferencesRequest
-	(*UpdateNotificationPreferencesRequest)(nil),  // 15: user.UpdateNotificationPreferencesRequest
-	(*DeleteNotificationPreferencesRequest)(nil),  // 16: user.DeleteNotificationPreferencesRequest
-	(*DeleteNotificationPreferencesResponse)(nil), // 17: user.DeleteNotificationPreferencesResponse
-	(*BankAccount)(nil),                           // 18: user.BankAccount
-	(*LinkBankAccountRequest)(nil),                // 19: user.LinkBankAccountRequest
-	(*ListBankAccountsRequest)(nil),               // 20: user.ListBankAccountsRequest
-	(*ListBankAccountsResponse)(nil),              // 21: user.ListBankAccountsResponse
-	(*timestamppb.Timestamp)(nil),                 // 22: google.protobuf.Timestamp
+	(*SignUpRequest)(nil),                         // 0: user.SignUpRequest
+	(*SignInRequest)(nil),                         // 1: user.SignInRequest
+	(*AuthResponse)(nil),                          // 2: user.AuthResponse
+	(*ResetPasswordRequest)(nil),                  // 3: user.ResetPasswordRequest
+	(*ResetPasswordResponse)(nil),                 // 4: user.ResetPasswordResponse
+	(*ChangePasswordRequest)(nil),                 // 5: user.ChangePasswordRequest
+	(*ChangePasswordResponse)(nil),                // 6: user.ChangePasswordResponse
+	(*User)(nil),                                  // 7: user.User
+	(*CreateUserRequest)(nil),                     // 8: user.CreateUserRequest
+	(*GetUserRequest)(nil),                        // 9: user.GetUserRequest
+	(*UpdateUserRequest)(nil),                     // 10: user.UpdateUserRequest
+	(*DeleteUserRequest)(nil),                     // 11: user.DeleteUserRequest
+	(*DeleteUserResponse)(nil),                    // 12: user.DeleteUserResponse
+	(*UserPreferences)(nil),                       // 13: user.UserPreferences
+	(*CreateUserPreferencesRequest)(nil),          // 14: user.CreateUserPreferencesRequest
+	(*GetUserPreferencesRequest)(nil),             // 15: user.GetUserPreferencesRequest
+	(*UpdateUserPreferencesRequest)(nil),          // 16: user.UpdateUserPreferencesRequest
+	(*DeleteUserPreferencesRequest)(nil),          // 17: user.DeleteUserPreferencesRequest
+	(*DeleteUserPreferencesResponse)(nil),         // 18: user.DeleteUserPreferencesResponse
+	(*NotificationPreferences)(nil),               // 19: user.NotificationPreferences
+	(*CreateNotificationPreferencesRequest)(nil),  // 20: user.CreateNotificationPreferencesRequest
+	(*GetNotificationPreferencesRequest)(nil),     // 21: user.GetNotificationPreferencesRequest
+	(*UpdateNotificationPreferencesRequest)(nil),  // 22: user.UpdateNotificationPreferencesRequest
+	(*DeleteNotificationPreferencesRequest)(nil),  // 23: user.DeleteNotificationPreferencesRequest
+	(*DeleteNotificationPreferencesResponse)(nil), // 24: user.DeleteNotificationPreferencesResponse
+	(*BankAccount)(nil),                           // 25: user.BankAccount
+	(*LinkBankAccountRequest)(nil),                // 26: user.LinkBankAccountRequest
+	(*ListBankAccountsRequest)(nil),               // 27: user.ListBankAccountsRequest
+	(*ListBankAccountsResponse)(nil),              // 28: user.ListBankAccountsResponse
+	(*timestamppb.Timestamp)(nil),                 // 29: google.protobuf.Timestamp
 }
 var file_user_proto_depIdxs = []int32{
-	22, // 0: user.User.created_at:type_name -> google.protobuf.Timestamp
-	22, // 1: user.User.updated_at:type_name -> google.protobuf.Timestamp
-	18, // 2: user.User.bank_accounts:type_name -> user.BankAccount
-	22, // 3: user.BankAccount.created_at:type_name -> google.protobuf.Timestamp
-	22, // 4: user.BankAccount.updated_at:type_name -> google.protobuf.Timestamp
-	18, // 5: user.ListBankAccountsResponse.accounts:type_name -> user.BankAccount
-	1,  // 6: user.UserService.CreateUser:input_type -> user.CreateUserRequest
-	2,  // 7: user.UserService.GetUser:input_type -> user.GetUserRequest
-	3,  // 8: user.UserService.UpdateUser:input_type -> user.UpdateUserRequest
-	4,  // 9: user.UserService.DeleteUser:input_type -> user.DeleteUserRequest
-	7,  // 10: user.UserService.CreateUserPreferences:input_type -> user.CreateUserPreferencesRequest
-	8,  // 11: user.UserService.GetUserPreferences:input_type -> user.GetUserPreferencesRequest
-	9,  // 12: user.UserService.UpdateUserPreferences:input_type -> user.UpdateUserPreferencesRequest
-	10, // 13: user.UserService.DeleteUserPreferences:input_type -> user.DeleteUserPreferencesRequest
-	13, // 14: user.UserService.CreateNotificationPreferences:input_type -> user.CreateNotificationPreferencesRequest
-	14, // 15: user.UserService.GetNotificationPreferences:input_type -> user.GetNotificationPreferencesRequest
-	15, // 16: user.UserService.UpdateNotificationPreferences:input_type -> user.UpdateNotificationPreferencesRequest
-	16, // 17: user.UserService.DeleteNotificationPreferences:input_type -> user.DeleteNotificationPreferencesRequest
-	19, // 18: user.UserService.LinkBankAccount:input_type -> user.LinkBankAccountRequest
-	20, // 19: user.UserService.ListBankAccounts:input_type -> user.ListBankAccountsRequest
-	0,  // 20: user.UserService.CreateUser:output_type -> user.User
-	0,  // 21: user.UserService.GetUser:output_type -> user.User
-	0,  // 22: user.UserService.UpdateUser:output_type -> user.User
-	5,  // 23: user.UserService.DeleteUser:output_type -> user.DeleteUserResponse
-	6,  // 24: user.UserService.CreateUserPreferences:output_type -> user.UserPreferences
-	6,  // 25: user.UserService.GetUserPreferences:output_type -> user.UserPreferences
-	6,  // 26: user.UserService.UpdateUserPreferences:output_type -> user.UserPreferences
-	11, // 27: user.UserService.DeleteUserPreferences:output_type -> user.DeleteUserPreferencesResponse
-	12, // 28: user.UserService.CreateNotificationPreferences:output_type -> user.NotificationPreferences
-	12, // 29: user.UserService.GetNotificationPreferences:output_type -> user.NotificationPreferences
-	12, // 30: user.UserService.UpdateNotificationPreferences:output_type -> user.NotificationPreferences
-	17, // 31: user.UserService.DeleteNotificationPreferences:output_type -> user.DeleteNotificationPreferencesResponse
-	18, // 32: user.UserService.LinkBankAccount:output_type -> user.BankAccount
-	21, // 33: user.UserService.ListBankAccounts:output_type -> user.ListBankAccountsResponse
-	20, // [20:34] is the sub-list for method output_type
-	6,  // [6:20] is the sub-list for method input_type
-	6,  // [6:6] is the sub-list for extension type_name
-	6,  // [6:6] is the sub-list for extension extendee
-	0,  // [0:6] is the sub-list for field type_name
+	7,  // 0: user.AuthResponse.user:type_name -> user.User
+	29, // 1: user.User.created_at:type_name -> google.protobuf.Timestamp
+	29, // 2: user.User.updated_at:type_name -> google.protobuf.Timestamp
+	25, // 3: user.User.bank_accounts:type_name -> user.BankAccount
+	29, // 4: user.BankAccount.created_at:type_name -> google.protobuf.Timestamp
+	29, // 5: user.BankAccount.updated_at:type_name -> google.protobuf.Timestamp
+	25, // 6: user.ListBankAccountsResponse.accounts:type_name -> user.BankAccount
+	8,  // 7: user.UserService.CreateUser:input_type -> user.CreateUserRequest
+	9,  // 8: user.UserService.GetUser:input_type -> user.GetUserRequest
+	10, // 9: user.UserService.UpdateUser:input_type -> user.UpdateUserRequest
+	11, // 10: user.UserService.DeleteUser:input_type -> user.DeleteUserRequest
+	0,  // 11: user.UserService.SignUp:input_type -> user.SignUpRequest
+	1,  // 12: user.UserService.SignIn:input_type -> user.SignInRequest
+	3,  // 13: user.UserService.ResetPassword:input_type -> user.ResetPasswordRequest
+	5,  // 14: user.UserService.ChangePassword:input_type -> user.ChangePasswordRequest
+	14, // 15: user.UserService.CreateUserPreferences:input_type -> user.CreateUserPreferencesRequest
+	15, // 16: user.UserService.GetUserPreferences:input_type -> user.GetUserPreferencesRequest
+	16, // 17: user.UserService.UpdateUserPreferences:input_type -> user.UpdateUserPreferencesRequest
+	17, // 18: user.UserService.DeleteUserPreferences:input_type -> user.DeleteUserPreferencesRequest
+	20, // 19: user.UserService.CreateNotificationPreferences:input_type -> user.CreateNotificationPreferencesRequest
+	21, // 20: user.UserService.GetNotificationPreferences:input_type -> user.GetNotificationPreferencesRequest
+	22, // 21: user.UserService.UpdateNotificationPreferences:input_type -> user.UpdateNotificationPreferencesRequest
+	23, // 22: user.UserService.DeleteNotificationPreferences:input_type -> user.DeleteNotificationPreferencesRequest
+	26, // 23: user.UserService.LinkBankAccount:input_type -> user.LinkBankAccountRequest
+	27, // 24: user.UserService.ListBankAccounts:input_type -> user.ListBankAccountsRequest
+	7,  // 25: user.UserService.CreateUser:output_type -> user.User
+	7,  // 26: user.UserService.GetUser:output_type -> user.User
+	7,  // 27: user.UserService.UpdateUser:output_type -> user.User
+	12, // 28: user.UserService.DeleteUser:output_type -> user.DeleteUserResponse
+	2,  // 29: user.UserService.SignUp:output_type -> user.AuthResponse
+	2,  // 30: user.UserService.SignIn:output_type -> user.AuthResponse
+	4,  // 31: user.UserService.ResetPassword:output_type -> user.ResetPasswordResponse
+	6,  // 32: user.UserService.ChangePassword:output_type -> user.ChangePasswordResponse
+	13, // 33: user.UserService.CreateUserPreferences:output_type -> user.UserPreferences
+	13, // 34: user.UserService.GetUserPreferences:output_type -> user.UserPreferences
+	13, // 35: user.UserService.UpdateUserPreferences:output_type -> user.UserPreferences
+	18, // 36: user.UserService.DeleteUserPreferences:output_type -> user.DeleteUserPreferencesResponse
+	19, // 37: user.UserService.CreateNotificationPreferences:output_type -> user.NotificationPreferences
+	19, // 38: user.UserService.GetNotificationPreferences:output_type -> user.NotificationPreferences
+	19, // 39: user.UserService.UpdateNotificationPreferences:output_type -> user.NotificationPreferences
+	24, // 40: user.UserService.DeleteNotificationPreferences:output_type -> user.DeleteNotificationPreferencesResponse
+	25, // 41: user.UserService.LinkBankAccount:output_type -> user.BankAccount
+	28, // 42: user.UserService.ListBankAccounts:output_type -> user.ListBankAccountsResponse
+	25, // [25:43] is the sub-list for method output_type
+	7,  // [7:25] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_user_proto_init() }
@@ -1616,7 +2051,7 @@ func file_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_proto_rawDesc), len(file_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   22,
+			NumMessages:   29,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

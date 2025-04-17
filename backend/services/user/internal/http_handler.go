@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strings"
 
+	ctx "untether/services/user/pkg/context"
 	pb "untether/services/user/proto"
 
 	"google.golang.org/grpc/codes"
@@ -23,18 +24,41 @@ func NewHTTPHandler(userService *UserService) *HTTPHandler {
 }
 
 func (h *HTTPHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	path := strings.TrimPrefix(r.URL.Path, "/api/v1")
+	// Add CORS headers
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, Authorization")
+
+	// Handle preflight requests
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
+	path := r.URL.Path
 
 	if r.Method == http.MethodPost {
 		switch path {
-		case "/users":
+		case "/api/v1/auth/signup":
+			h.handleSignUp(w, r)
+			return
+		case "/api/v1/auth/signin":
+			h.handleSignIn(w, r)
+			return
+		case "/api/v1/auth/reset-password":
+			h.handleResetPassword(w, r)
+			return
+		case "/api/v1/auth/change-password":
+			h.handleChangePassword(w, r)
+			return
+		case "/api/v1/users":
 			h.handleCreateUser(w, r)
 			return
-		case "/users/preferences":
+		case "/api/v1/users/preferences":
 			h.handleCreateUserPreferences(w, r)
 			return
 		}
-	} else if r.Method == http.MethodGet && strings.HasPrefix(path, "/users/") {
+	} else if r.Method == http.MethodGet && strings.HasPrefix(path, "/api/v1/users/") {
 		h.handleGetUser(w, r)
 		return
 	}
@@ -42,17 +66,96 @@ func (h *HTTPHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 }
 
+func (h *HTTPHandler) handleSignUp(w http.ResponseWriter, r *http.Request) {
+	var req struct {
+		Email     string `json:"email"`
+		Password  string `json:"password"`
+		FirstName string `json:"firstName"`
+		LastName  string `json:"lastName"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	resp, err := h.userService.SignUp(r.Context(), &pb.SignUpRequest{
+		Email:     req.Email,
+		Password:  req.Password,
+		FirstName: req.FirstName,
+		LastName:  req.LastName,
+	})
+	if err != nil {
+		log.Printf("Error in signup: %v", err)
+		switch status.Code(err) {
+		case codes.AlreadyExists:
+			http.Error(w, "User already exists", http.StatusConflict)
+		case codes.InvalidArgument:
+			http.Error(w, err.Error(), http.StatusBadRequest)
+		default:
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+		}
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(resp)
+}
+
+func (h *HTTPHandler) handleSignIn(w http.ResponseWriter, r *http.Request) {
+	var req struct {
+		Email    string `json:"email"`
+		Password string `json:"password"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	resp, err := h.userService.SignIn(r.Context(), &pb.SignInRequest{
+		Email:    req.Email,
+		Password: req.Password,
+	})
+	if err != nil {
+		log.Printf("Error in signin: %v", err)
+		switch status.Code(err) {
+		case codes.NotFound, codes.Unauthenticated:
+			http.Error(w, "Invalid email or password", http.StatusUnauthorized)
+		default:
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+		}
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(resp)
+}
+
 func (h *HTTPHandler) handleGetUser(w http.ResponseWriter, r *http.Request) {
 	// Extract user ID from URL path
-	path := strings.TrimPrefix(r.URL.Path, "/users/")
+	path := strings.TrimPrefix(r.URL.Path, "/api/v1/users/")
 	if path == "" || path == "users" {
 		http.Error(w, "User ID is required", http.StatusBadRequest)
 		return
 	}
-	userID := path
+	requestedUserID := path
+
+	// Get authenticated user ID from context
+	authenticatedUserID, ok := r.Context().Value(ctx.UserIDKey).(string)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	// Only allow users to access their own data
+	if requestedUserID != authenticatedUserID {
+		http.Error(w, "Forbidden: you can only access your own data", http.StatusForbidden)
+		return
+	}
 
 	user, err := h.userService.GetUser(r.Context(), &pb.GetUserRequest{
-		Id: userID,
+		Id: requestedUserID,
 	})
 	if err != nil {
 		log.Printf("Error getting user: %v", err)
@@ -62,9 +165,9 @@ func (h *HTTPHandler) handleGetUser(w http.ResponseWriter, r *http.Request) {
 		case codes.InvalidArgument:
 			http.Error(w, err.Error(), http.StatusBadRequest)
 		case codes.Internal:
-			http.Error(w, "Internal server error: "+err.Error(), http.StatusInternalServerError)
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
 		default:
-			http.Error(w, "Internal server error: "+err.Error(), http.StatusInternalServerError)
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
 		}
 		return
 	}
@@ -156,4 +259,54 @@ func (h *HTTPHandler) handleCreateUserPreferences(w http.ResponseWriter, r *http
 		http.Error(w, "Error encoding response", http.StatusInternalServerError)
 		return
 	}
+}
+
+func (h *HTTPHandler) handleResetPassword(w http.ResponseWriter, r *http.Request) {
+	var req struct {
+		Email string `json:"email"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	resp, err := h.userService.ResetPassword(r.Context(), &pb.ResetPasswordRequest{
+		Email: req.Email,
+	})
+	if err != nil {
+		log.Printf("Error in reset password: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(resp)
+}
+
+func (h *HTTPHandler) handleChangePassword(w http.ResponseWriter, r *http.Request) {
+	var req struct {
+		UserId      string `json:"userId"`
+		OldPassword string `json:"oldPassword"`
+		NewPassword string `json:"newPassword"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	resp, err := h.userService.ChangePassword(r.Context(), &pb.ChangePasswordRequest{
+		UserId:      req.UserId,
+		OldPassword: req.OldPassword,
+		NewPassword: req.NewPassword,
+	})
+	if err != nil {
+		log.Printf("Error in change password: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(resp)
 }

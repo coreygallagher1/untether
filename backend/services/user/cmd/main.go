@@ -15,6 +15,7 @@ import (
 
 	"untether/services/plaid/client"
 	"untether/services/user/internal"
+	"untether/services/user/internal/middleware"
 	pb "untether/services/user/proto"
 )
 
@@ -77,10 +78,14 @@ func main() {
 	// Register reflection service for gRPCurl
 	reflection.Register(grpcServer)
 
-	// Create HTTP server
+	// Create HTTP handler with authentication middleware
+	httpHandler := internal.NewHTTPHandler(userService)
+	authMiddleware := middleware.NewAuthMiddleware(userService)
+
+	// Create HTTP server with middleware
 	httpServer := &http.Server{
 		Addr:    fmt.Sprintf(":%d", httpPort),
-		Handler: internal.NewHTTPHandler(userService),
+		Handler: authMiddleware.Authenticate(httpHandler),
 	}
 
 	// Start gRPC server in a goroutine
