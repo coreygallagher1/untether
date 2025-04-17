@@ -1,24 +1,59 @@
 # Untether
 
-Untether is a personal finance application that helps users manage their finances through automated roundups and smart transaction categorization.
+Untether is a holistic personal finance application featuring automated debt repayment and donations from roundups on daily transactions.
 
 ## Project Structure
 
 ```
 Untether/
-├── backend/           # Backend services and API
-│   ├── services/     # Microservices (user, plaid, transaction)
-│   ├── proto/        # Protocol buffer definitions
+├── backend/          # Backend services and API
+│   ├── services/     # Microservices
+│   │   ├── user/     # User management service
+│   │   │   ├── cmd/          # Service entry point
+│   │   │   ├── internal/     # Service implementation
+│   │   │   ├── proto/        # Protocol buffer definitions
+│   │   │   ├── migrations/   # Database migrations
+│   │   │   ├── tests/        # Test suites
+│   │   │   └── Dockerfile    # Service container definition
+│   │   │
+│   │   ├── plaid/    # Plaid integration service
+│   │   │   ├── cmd/          # Service entry point
+│   │   │   ├── internal/     # Service implementation
+│   │   │   ├── proto/        # Protocol buffer definitions
+│   │   │   ├── migrations/   # Database migrations
+│   │   │   ├── tests/        # Test suites
+│   │   │   └── Dockerfile    # Service container definition
+│   │   │
+│   │   └── transaction/ # Transaction processing service
+│   │       ├── cmd/          # Service entry point
+│   │       ├── internal/     # Service implementation
+│   │       ├── proto/        # Protocol buffer definitions
+│   │       ├── migrations/   # Database migrations
+│   │       ├── tests/        # Test suites
+│   │       └── Dockerfile    # Service container definition
+│   │
 │   ├── pkg/          # Shared packages
+│   │
 │   ├── configs/      # Configuration files
-│   ├── docker-compose.yml
-│   ├── Makefile
-│   └── .env
+│   │   └── config.go # Main configuration definitions
+│   │
+│   ├── docker-compose.yml # Docker orchestration
+│   ├── Makefile      # Build and development commands
+│   ├── go.mod        # Go module dependencies
+│   ├── go.sum        # Go module checksums
+│   └── .env          # Environment variables
 │
 └── frontend/         # Next.js frontend application
     ├── src/          # Source code
     ├── public/       # Static assets
-    └── package.json
+    ├── .next/        # Next.js build output
+    ├── node_modules/ # Node.js dependencies
+    ├── package.json  # Project dependencies
+    ├── tsconfig.json # TypeScript configuration
+    ├── next.config.js # Next.js configuration
+    ├── next.config.ts # TypeScript Next.js configuration
+    ├── postcss.config.mjs # PostCSS configuration
+    └── eslint.config.mjs # ESLint configuration
 ```
 
 ## Getting Started
@@ -147,59 +182,4 @@ The project provides a comprehensive set of Make commands for development:
 
 ### Cleanup
 - `make clean` - Clean all build artifacts
-- `make clean-binaries` - Clean service binaries
-- `make clean-docker` - Clean Docker resources
-- `make clean-coverage` - Clean coverage reports
-
-## Service Ports
-
-- User Service: 50051
-- Plaid Service: 50052
-- Transaction Service: 50053
-
-## API Documentation
-
-The services use gRPC for communication. You can test the endpoints using `grpcurl`:
-
-```bash
-# Create a user
-grpcurl -plaintext -d '{"email": "test@example.com", "first_name": "Test", "last_name": "User"}' localhost:50051 proto.UserService/CreateUser
-
-# Get a user
-grpcurl -plaintext -d '{"id": "user-id"}' localhost:50051 proto.UserService/GetUser
-
-# Create a Plaid Link token
-grpcurl -plaintext -d '{"user_id": "user-id"}' localhost:50052 proto.PlaidService/CreateLinkToken
-
-# Exchange a public token for an access token
-grpcurl -plaintext -d '{"public_token": "public-token"}' localhost:50052 proto.PlaidService/ExchangePublicToken
-
-# Get accounts for an access token
-grpcurl -plaintext -d '{"access_token": "access-token"}' localhost:50052 proto.PlaidService/GetAccounts
-
-# Get balance for an account
-grpcurl -plaintext -d '{"access_token": "access-token", "account_id": "account-id"}' localhost:50052 proto.PlaidService/GetBalance
-
-# Calculate roundup for a transaction
-grpcurl -plaintext -d '{"user_id": "user-id", "transaction_amount": 10.50}' localhost:50053 proto.TransactionService/RoundupTransaction
-```
-
-## Plaid Integration
-
-The Plaid service provides a secure way to connect bank accounts using Plaid's API. The service supports:
-
-- Creating Link tokens for account linking
-- Exchanging public tokens for access tokens
-- Retrieving account information
-- Getting account balances
-
-For development, use the sandbox environment and test credentials:
-- Username: `user_good`
-- Password: `pass_good`
-
-For production, make sure to:
-1. Use production credentials
-2. Enable proper error handling
-3. Implement rate limiting
-4. Set up webhook notifications
-5. Follow Plaid's security best practices
+- `make clean-binaries`
