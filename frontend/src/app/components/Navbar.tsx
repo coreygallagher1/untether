@@ -1,7 +1,7 @@
 'use client';
 
 import { AppBar, Toolbar, Typography, Button, Box, IconButton, Menu, MenuItem, Avatar, Tabs, Tab } from '@mui/material';
-import { Settings, ExitToApp, AccountBalance, Favorite, CreditCard, School, Receipt } from '@mui/icons-material';
+import { Settings, ExitToApp, AccountBalance, Favorite, CreditCard, School, Receipt, Calculate } from '@mui/icons-material';
 import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -36,6 +36,9 @@ export default function Navbar() {
         break;
       case '/learn':
         setActiveTab(4);
+        break;
+      case '/tax-center':
+        setActiveTab(5);
         break;
       default:
         // If on any other page, default to dashboard (logo)
@@ -80,6 +83,9 @@ export default function Navbar() {
         break;
       case 4:
         router.push('/learn');
+        break;
+      case 5:
+        router.push('/tax-center');
         break;
       default:
         break;
@@ -192,12 +198,17 @@ export default function Navbar() {
                 icon={<Favorite sx={{ fontSize: 20 }} />}
                 iconPosition="start"
               />
-              <Tab 
-                label="Learn" 
-                icon={<School sx={{ fontSize: 20 }} />}
-                iconPosition="start"
-              />
-            </Tabs>
+                      <Tab 
+                        label="Learn" 
+                        icon={<School sx={{ fontSize: 20 }} />}
+                        iconPosition="start"
+                      />
+                      <Tab 
+                        label="Tax Center" 
+                        icon={<Calculate sx={{ fontSize: 20 }} />}
+                        iconPosition="start"
+                      />
+                    </Tabs>
           )}
         </Box>
         {isLoggedIn ? (
@@ -253,12 +264,12 @@ export default function Navbar() {
                 },
               }}
             >
-              <MenuItem onClick={handleSettings}>
-                <Settings sx={{ mr: 1 }} /> Settings
-              </MenuItem>
-              <MenuItem onClick={handleLogout}>
-                <ExitToApp sx={{ mr: 1 }} /> Logout
-              </MenuItem>
+                    <MenuItem onClick={handleSettings}>
+                      <Settings sx={{ mr: 1 }} /> Settings
+                    </MenuItem>
+                    <MenuItem onClick={handleLogout}>
+                      <ExitToApp sx={{ mr: 1 }} /> Logout
+                    </MenuItem>
             </Menu>
           </Box>
         ) : (
