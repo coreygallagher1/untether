@@ -1,7 +1,7 @@
 'use client';
 
-import { AppBar, Toolbar, Typography, Button, Box, IconButton, Menu, MenuItem, Avatar } from '@mui/material';
-import { Settings, ExitToApp } from '@mui/icons-material';
+import { AppBar, Toolbar, Typography, Button, Box, IconButton, Menu, MenuItem, Avatar, Tabs, Tab } from '@mui/material';
+import { Settings, ExitToApp, AccountBalance, Favorite, Dashboard, CreditCard, School } from '@mui/icons-material';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -12,6 +12,7 @@ import { getInitials } from '../../utils/initials';
 export default function Navbar() {
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [activeTab, setActiveTab] = useState(0);
   const { isLoggedIn, logout, user } = useAuth();
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -30,6 +31,30 @@ export default function Navbar() {
   const handleSettings = () => {
     router.push('/settings');
     handleClose();
+  };
+
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setActiveTab(newValue);
+    // Navigate to the appropriate page
+    switch (newValue) {
+      case 0:
+        router.push('/dashboard');
+        break;
+      case 1:
+        router.push('/bank-accounts');
+        break;
+      case 2:
+        router.push('/causes');
+        break;
+      case 3:
+        router.push('/loans');
+        break;
+      case 4:
+        router.push('/learn');
+        break;
+      default:
+        break;
+    }
   };
 
   return (
@@ -86,6 +111,61 @@ export default function Navbar() {
               Untether
             </Typography>
           </Box>
+          
+          {/* Navigation Tabs - Only show when logged in */}
+          {isLoggedIn && (
+            <Tabs
+              value={activeTab}
+              onChange={handleTabChange}
+              sx={{
+                ml: 4,
+                '& .MuiTab-root': {
+                  color: 'rgba(255, 255, 255, 0.7)',
+                  fontWeight: 500,
+                  fontSize: '0.95rem',
+                  minHeight: 48,
+                  '&.Mui-selected': {
+                    color: 'white',
+                    fontWeight: 600,
+                  },
+                  '&:hover': {
+                    color: 'rgba(255, 255, 255, 0.9)',
+                  }
+                },
+                '& .MuiTabs-indicator': {
+                  backgroundColor: 'white',
+                  height: 3,
+                  borderRadius: '2px 2px 0 0',
+                }
+              }}
+            >
+              <Tab 
+                label="Dashboard" 
+                icon={<Dashboard sx={{ fontSize: 20 }} />}
+                iconPosition="start"
+              />
+              <Tab 
+                label="Bank Accounts" 
+                icon={<AccountBalance sx={{ fontSize: 20 }} />}
+                iconPosition="start"
+              />
+              <Tab 
+                label="Causes" 
+                icon={<Favorite sx={{ fontSize: 20 }} />}
+                iconPosition="start"
+              />
+              <Tab 
+                label="Loans" 
+                icon={<CreditCard sx={{ fontSize: 20 }} />}
+                iconPosition="start"
+              />
+              <Tab 
+                label="Learn" 
+                icon={<School sx={{ fontSize: 20 }} />}
+                iconPosition="start"
+              />
+            </Tabs>
+          )}
         </Box>
         {isLoggedIn ? (
           <Box>
