@@ -11,7 +11,7 @@ install: ## Install Python dependencies
 	pip install -r requirements.txt
 
 dev: ## Start development environment
-	docker compose up --build
+	docker compose up --build -d
 
 prod: ## Start production environment
 	docker compose -f docker-compose.prod.yml up --build -d
@@ -68,3 +68,6 @@ plaid-service: ## Start only plaid service
 
 transaction-service: ## Start only transaction service
 	docker-compose up transaction-service
+
+seed: ## Seed database with test data
+	./seed.sh
