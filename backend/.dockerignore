@@ -1,0 +1,91 @@
+# Docker ignore file for Python services
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Ignore virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore Git
+.git/
+.gitignore
+
+# Ignore documentation
+*.md
+docs/
+
+# Ignore test files
+tests/
+test_*/
+*_test.py
+pytest.ini
+.pytest_cache/
+
+# Ignore development tools
+.coverage
+htmlcov/
+.tox/
+.nox/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Ignore logs
+*.log
+logs/
+
+# Ignore temporary files
+tmp/
+temp/
+.tmp/
+
+# Ignore environment files (will be passed via docker-compose)
+.env
+.env.local
+.env.*.local
+
+# Ignore Docker files (except the ones we need)
+docker-compose*.yml
+Dockerfile*
+.dockerignore
+
+# Ignore database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Ignore Alembic versions (will be created in container)
+migrations/versions/

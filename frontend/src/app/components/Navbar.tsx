@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '../contexts/AuthContext';
+import { getInitials } from '../../utils/initials';
 
 export default function Navbar() {
   const router = useRouter();
@@ -112,7 +113,7 @@ export default function Navbar() {
                   fontWeight: 600
                 }}
               >
-                {user?.first_name?.charAt(0)}{user?.last_name?.charAt(0)}
+                {getInitials(user || {})}
               </Avatar>
             </IconButton>
             <Menu

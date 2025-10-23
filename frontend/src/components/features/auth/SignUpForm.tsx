@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -18,24 +18,35 @@ import { LockOutlined, PersonOutlined, EmailOutlined } from '@mui/icons-material
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { authApi } from '@/api/auth';
+import { useAuth } from '@/app/contexts/AuthContext';
 
 const signUpSchema = z.object({
   firstName: z.string().min(2, 'First name must be at least 2 characters'),
   lastName: z.string().min(2, 'Last name must be at least 2 characters'),
   email: z.string().email('Invalid email address'),
+  username: z.string()
+    .min(3, 'Username must be at least 3 characters')
+    .max(50, 'Username must be less than 50 characters')
+    .regex(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores'),
   password: z.string()
     .min(8, 'Password must be at least 8 characters')
     .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
     .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
     .regex(/[0-9]/, 'Password must contain at least one number')
     .regex(/[^A-Za-z0-9]/, 'Password must contain at least one special character'),
+  confirmPassword: z.string(),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
 });
 
 type SignUpFormData = z.infer<typeof signUpSchema>;
 
 export default function SignUpForm() {
   const [error, setError] = useState<string | null>(null);
+  const [password, setPassword] = useState<string>('');
   const router = useRouter();
+  const { login } = useAuth();
   const {
     register,
     handleSubmit,
@@ -46,19 +57,34 @@ export default function SignUpForm() {
 
   const onSubmit = async (data: SignUpFormData) => {
     try {
+      setError(null); // Clear any previous errors
       const response = await authApi.signUp(data);
-      // Store the token in localStorage
-      localStorage.setItem('token', response.token);
-      // Redirect to dashboard
-      router.push('/dashboard');
+      // Auto-login after successful registration
+      if (response.user) {
+        login(response.access_token, response.user);
+        router.push('/dashboard');
+      } else {
+        setError('Failed to retrieve user data. Please try logging in manually.');
+      }
     } catch (err) {
       if (err instanceof Error) {
-        setError(err.message);
+        // Extract the actual error message from the API response
+        const errorMessage = err.message;
+        setError(errorMessage);
       } else {
-        setError('An error occurred during signup. Please try again.');
+        setError('An unexpected error occurred during signup. Please try again.');
       }
     }
   };
+
+  // Password validation criteria
+  const passwordCriteria = [
+    { label: 'At least 8 characters', met: password.length >= 8 },
+    { label: 'One uppercase letter', met: /[A-Z]/.test(password) },
+    { label: 'One lowercase letter', met: /[a-z]/.test(password) },
+    { label: 'One number', met: /[0-9]/.test(password) },
+    { label: 'One special character', met: /[^A-Za-z0-9]/.test(password) },
+  ];
 
   return (
     <Container maxWidth="sm" sx={{ py: 8 }}>
@@ -144,12 +170,89 @@ export default function SignUpForm() {
           />
 
           <TextField
-            {...register('password')}
+            {...register('username')}
+            label="Username"
+            variant="outlined"
+            error={!!errors.username}
+            helperText={errors.username?.message}
+            fullWidth
+            sx={{ mb: 2 }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <PersonOutlined sx={{ color: 'text.secondary' }} />
+                </InputAdornment>
+              ),
+            }}
+          />
+
+          <TextField
             label="Password"
             type="password"
             variant="outlined"
             error={!!errors.password}
             helperText={errors.password?.message}
+            fullWidth
+            sx={{ mb: 2 }}
+            {...register('password', {
+              onChange: (e) => setPassword(e.target.value)
+            })}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LockOutlined sx={{ color: 'text.secondary' }} />
+                </InputAdornment>
+              ),
+            }}
+          />
+
+          {/* Password Criteria */}
+          {password && (
+            <Box sx={{ mb: 2, p: 2, bgcolor: 'grey.50', borderRadius: 1 }}>
+              <Typography variant="body2" sx={{ mb: 1, fontWeight: 'medium' }}>
+                Password Requirements:
+              </Typography>
+              {passwordCriteria.map((criterion, index) => (
+                <Box key={index} sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}>
+                  <Box
+                    sx={{
+                      width: 16,
+                      height: 16,
+                      borderRadius: '50%',
+                      bgcolor: criterion.met ? 'success.main' : 'grey.300',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      mr: 1,
+                    }}
+                  >
+                    {criterion.met && (
+                      <Typography variant="caption" sx={{ color: 'white', fontSize: '10px' }}>
+                        ✓
+                      </Typography>
+                    )}
+                  </Box>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: criterion.met ? 'success.main' : 'text.secondary',
+                      fontSize: '0.875rem',
+                    }}
+                  >
+                    {criterion.label}
+                  </Typography>
+                </Box>
+              ))}
+            </Box>
+          )}
+
+          <TextField
+            {...register('confirmPassword')}
+            label="Confirm Password"
+            type="password"
+            variant="outlined"
+            error={!!errors.confirmPassword}
+            helperText={errors.confirmPassword?.message}
             fullWidth
             sx={{ mb: 3 }}
             InputProps={{

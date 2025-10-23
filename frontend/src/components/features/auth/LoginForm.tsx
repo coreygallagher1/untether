@@ -48,8 +48,12 @@ export default function LoginForm() {
   const onSubmit = async (data: LoginFormData) => {
     try {
       const response = await authApi.login({ email: data.email, password: data.password });
-      login(response.token, response.user);
-      router.push('/dashboard');
+      if (response.user) {
+        login(response.access_token, response.user);
+        router.push('/dashboard');
+      } else {
+        setError('Failed to retrieve user data. Please try again.');
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Invalid email or password');
     }

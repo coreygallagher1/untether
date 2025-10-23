@@ -9,6 +9,7 @@ interface AuthContextType {
   token: string | null;
   login: (token: string, user: User) => void;
   logout: () => void;
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -25,7 +26,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const storedToken = localStorage.getItem('token');
       if (storedToken) {
         try {
+          console.log('Attempting to get user data with token:', storedToken.substring(0, 20) + '...');
           const userData = await authApi.getUser();
+          console.log('Successfully got user data:', userData);
           setToken(storedToken);
           setUser(userData);
           setIsLoggedIn(true);
@@ -64,12 +67,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     router.push('/');
   };
 
+  const refreshUser = async () => {
+    try {
+      const userData = await authApi.getUser();
+      setUser(userData);
+    } catch (error) {
+      console.error('Failed to refresh user data:', error);
+      // Don't logout automatically - just log the error
+      // The user might still be logged in, just the refresh failed
+    }
+  };
+
   if (isLoading) {
     return null; // or return a loading spinner
   }
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, user, token, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, user, token, login, logout, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );

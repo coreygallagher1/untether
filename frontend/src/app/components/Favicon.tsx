@@ -5,9 +5,9 @@ import Head from 'next/head';
 export function Favicon() {
   return (
     <Head>
-      <link rel="icon" href="/assets/UntetherLogo.png" type="image/png" />
-      <link rel="shortcut icon" href="/assets/UntetherLogo.png" type="image/png" />
-      <link rel="apple-touch-icon" href="/assets/UntetherLogo.png" />
+      <link rel="icon" href="/assets/favicon.ico" />
+      <link rel="shortcut icon" href="/assets/favicon.ico" />
+      <link rel="apple-touch-icon" href="/assets/favicon.ico" />
     </Head>
   );
 } 
