@@ -2,8 +2,8 @@
 
 import { AppBar, Toolbar, Typography, Button, Box, IconButton, Menu, MenuItem, Avatar, Tabs, Tab } from '@mui/material';
 import { Settings, ExitToApp, AccountBalance, Favorite, Dashboard, CreditCard, School } from '@mui/icons-material';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '../contexts/AuthContext';
@@ -11,9 +11,35 @@ import { getInitials } from '../../utils/initials';
 
 export default function Navbar() {
   const router = useRouter();
+  const pathname = usePathname();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [activeTab, setActiveTab] = useState(0);
   const { isLoggedIn, logout, user } = useAuth();
+
+  // Sync active tab with current pathname
+  useEffect(() => {
+    switch (pathname) {
+      case '/dashboard':
+        setActiveTab(0);
+        break;
+      case '/bank-accounts':
+        setActiveTab(1);
+        break;
+      case '/causes':
+        setActiveTab(2);
+        break;
+      case '/loans':
+        setActiveTab(3);
+        break;
+      case '/learn':
+        setActiveTab(4);
+        break;
+      default:
+        // If on any other page, default to dashboard tab
+        setActiveTab(0);
+        break;
+    }
+  }, [pathname]);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
