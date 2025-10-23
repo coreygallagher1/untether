@@ -1,7 +1,7 @@
 'use client';
 
 import { AppBar, Toolbar, Typography, Button, Box, IconButton, Menu, MenuItem, Avatar, Tabs, Tab } from '@mui/material';
-import { Settings, ExitToApp, AccountBalance, Favorite, Dashboard, CreditCard, School } from '@mui/icons-material';
+import { Settings, ExitToApp, AccountBalance, Favorite, CreditCard, School, Receipt } from '@mui/icons-material';
 import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -20,23 +20,26 @@ export default function Navbar() {
   useEffect(() => {
     switch (pathname) {
       case '/dashboard':
-        setActiveTab(0);
+        setActiveTab(-1); // Special value for dashboard (logo)
         break;
       case '/bank-accounts':
+        setActiveTab(0);
+        break;
+      case '/bills':
         setActiveTab(1);
         break;
-      case '/causes':
+      case '/loans':
         setActiveTab(2);
         break;
-      case '/loans':
+      case '/causes':
         setActiveTab(3);
         break;
       case '/learn':
         setActiveTab(4);
         break;
       default:
-        // If on any other page, default to dashboard tab
-        setActiveTab(0);
+        // If on any other page, default to dashboard (logo)
+        setActiveTab(-1);
         break;
     }
   }, [pathname]);
@@ -64,16 +67,16 @@ export default function Navbar() {
     // Navigate to the appropriate page
     switch (newValue) {
       case 0:
-        router.push('/dashboard');
-        break;
-      case 1:
         router.push('/bank-accounts');
         break;
+      case 1:
+        router.push('/bills');
+        break;
       case 2:
-        router.push('/causes');
+        router.push('/loans');
         break;
       case 3:
-        router.push('/loans');
+        router.push('/causes');
         break;
       case 4:
         router.push('/learn');
@@ -111,9 +114,13 @@ export default function Navbar() {
             alignItems: 'center', 
             gap: '0.5rem',
             textDecoration: 'none',
-            transition: 'opacity 0.2s ease',
+            transition: 'all 0.3s ease',
+            borderRadius: '8px',
+            px: 2,
+            py: 1,
+            filter: activeTab === -1 ? 'drop-shadow(0 0 12px rgba(255, 255, 255, 0.4))' : 'none',
             '&:hover': {
-              opacity: 0.9
+              filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.3))'
             }
           }}>
             <Image
@@ -166,23 +173,23 @@ export default function Navbar() {
               }}
             >
               <Tab 
-                label="Dashboard" 
-                icon={<Dashboard sx={{ fontSize: 20 }} />}
-                iconPosition="start"
-              />
-              <Tab 
                 label="Bank Accounts" 
                 icon={<AccountBalance sx={{ fontSize: 20 }} />}
                 iconPosition="start"
               />
               <Tab 
-                label="Causes" 
-                icon={<Favorite sx={{ fontSize: 20 }} />}
+                label="Bills" 
+                icon={<Receipt sx={{ fontSize: 20 }} />}
                 iconPosition="start"
               />
               <Tab 
                 label="Loans" 
                 icon={<CreditCard sx={{ fontSize: 20 }} />}
+                iconPosition="start"
+              />
+              <Tab 
+                label="Causes" 
+                icon={<Favorite sx={{ fontSize: 20 }} />}
                 iconPosition="start"
               />
               <Tab 
