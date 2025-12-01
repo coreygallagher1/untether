@@ -60,6 +60,10 @@ migrate: ## Run database migrations
 create-migration: ## Create new migration (usage: make create-migration name=migration_name)
 	cd services/user-service && alembic revision --autogenerate -m "$(name)"
 
+init-db: ## Initialize database from models (simple, no migrations)
+	@echo "Initializing database from models..."
+	@docker compose run --rm user-service python3 -c "import sys; sys.path.insert(0, '/app'); from shared.database import init_db; from shared.config import settings; print('Initializing database:', settings.database_url); print('Creating all tables from models...'); init_db(); print('✅ Database initialized successfully!'); print(''); print('Tables created:'); print('  - users'); print('  - user_preferences'); print('  - plaid_items'); print('  - bank_accounts'); print('  - roundup_calculations')"
+
 user-service: ## Start only user service
 	docker-compose up user-service
 

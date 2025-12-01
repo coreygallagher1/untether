@@ -25,3 +25,9 @@ def get_db():
         yield db
     finally:
         db.close()
+
+# Initialize database tables (alternative to migrations for development)
+def init_db():
+    """Create all tables from models. Use this instead of migrations during development."""
+    from .models import User, UserPreferences, PlaidItem, BankAccount, RoundupCalculation
+    Base.metadata.create_all(bind=engine)
