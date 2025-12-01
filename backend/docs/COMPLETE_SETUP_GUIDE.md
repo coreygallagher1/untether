@@ -108,8 +108,8 @@ make logs-prod    # View production logs
 
 ### **Database Commands**
 ```bash
-make migrate      # Run database migrations
-make create-migration name=migration_name  # Create new migration
+make init-db     # Initialize database from models (simple, no migrations)
+# Note: For production migrations, see docs/ADDING_MIGRATIONS_LATER.md
 ```
 
 ## 🌐 Service Endpoints

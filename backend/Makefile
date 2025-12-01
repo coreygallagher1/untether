@@ -1,5 +1,5 @@
 # Makefile for Python backend services
-.PHONY: help install dev test clean build up down logs migrate
+.PHONY: help install dev test clean build up down logs
 
 help: ## Show this help message
 	@echo 'Usage: make [target]'
@@ -53,12 +53,6 @@ status: ## Show service status
 
 status-prod: ## Show production service status
 	docker compose -f docker-compose.prod.yml ps
-
-migrate: ## Run database migrations
-	cd services/user-service && alembic upgrade head
-
-create-migration: ## Create new migration (usage: make create-migration name=migration_name)
-	cd services/user-service && alembic revision --autogenerate -m "$(name)"
 
 init-db: ## Initialize database from models (simple, no migrations)
 	@echo "Initializing database from models..."

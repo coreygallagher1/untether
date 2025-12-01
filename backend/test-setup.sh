@@ -211,17 +211,17 @@ else
     print_warning "Transaction Service API docs not accessible"
 fi
 
-# Test 6: Database Migration Test
-print_status "Test 6: Testing database migrations..."
+# Test 6: Database Initialization Test
+print_status "Test 6: Testing database initialization..."
 
-# Run migrations for user service
-print_status "Running database migrations..."
-docker compose exec user-service alembic upgrade head
+# Initialize database from models
+print_status "Initializing database from models..."
+make init-db
 
 if [ $? -eq 0 ]; then
-    print_success "Database migrations completed successfully"
+    print_success "Database initialization completed successfully"
 else
-    print_error "Database migrations failed"
+    print_error "Database initialization failed"
     exit 1
 fi
 
@@ -292,7 +292,7 @@ echo "  • Docker builds: ✅ Working"
 echo "  • Service startup: ✅ Working"
 echo "  • Health checks: ✅ Working"
 echo "  • API endpoints: ✅ Working"
-echo "  • Database migrations: ✅ Working"
+echo "  • Database initialization: ✅ Working"
 echo "  • Service communication: ✅ Working"
 echo ""
 echo "🚀 Ready for development!"

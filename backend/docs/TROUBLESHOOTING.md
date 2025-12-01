@@ -179,14 +179,18 @@ python3 test-api.py
 
 ## Database Management
 
-### Running Migrations
+### Initializing Database
 ```bash
-# Run migrations
-make migrate
+# Initialize database from models
+make init-db
 
-# Create new migration
-make create-migration name=add_new_field
+# When you change models:
+docker compose down -v        # Drop database
+docker compose up -d postgres # Recreate
+make init-db                  # Reinitialize
 ```
+
+**Note**: For production migrations, see `docs/ADDING_MIGRATIONS_LATER.md`
 
 ### Database Access
 ```bash
